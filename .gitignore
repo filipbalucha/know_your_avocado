@@ -175,3 +175,10 @@ sketch
 
 # Ignore Pixelmator files
 *.pxd/**/*
+fruitsfinal.ipynb
+
+frontend/.eslintcache
+
+*.jpg
+*.jpeg
+*.png
