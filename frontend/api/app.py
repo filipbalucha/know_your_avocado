@@ -44,6 +44,9 @@ def transform_image(image_bytes):
     my_transforms = transforms.Compose([
         transforms.Resize((100, 100)),
         transforms.ToTensor(),
+        # transforms.Normalize(
+        #     [0.485, 0.456, 0.406],
+        #     [0.229, 0.224, 0.225])
         # TODO normalize?
     ])
     image = Image.open(io.BytesIO(image_bytes))
@@ -52,10 +55,10 @@ def transform_image(image_bytes):
 
 def get_prediction(image_bytes):
     tensor = transform_image(image_bytes=image_bytes)
-    outputs = model.forward(tensor)
-    _, y_hat = outputs.max(1)
+    outputs = F.softmax(model.forward(tensor))
+    p, y_hat = outputs.max(1)
     predicted_idx = y_hat.item()
-    return CLASSES[predicted_idx]
+    return CLASSES[predicted_idx], p.item()
 
 
 @app.route('/predict', methods=['POST'])
@@ -63,8 +66,8 @@ def predict():
     if request.method == 'POST':
         file = request.files['file']
         img_bytes = file.read()
-        predicted_idx = get_prediction(image_bytes=img_bytes)
-        return {'ripeness': predicted_idx}
+        predicted_idx, confidence = get_prediction(image_bytes=img_bytes)
+        return {'ripeness': predicted_idx, 'confidence': confidence}
 
 
 if __name__ == '__main__':
