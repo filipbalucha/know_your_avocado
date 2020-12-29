@@ -10,7 +10,7 @@ from flask import Flask, request
 CLASSES = {0: 'ripe', 1: 'unripe'}
 TRAIN_MEAN = [0.5537, 0.5463, 0.4591]
 TRAIN_STD = [0.2730, 0.2693, 0.2850]
-IMAGE_SIZE = 200
+IMAGE_SIZE = 100
 
 # Source: https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html
 app = Flask(__name__)
