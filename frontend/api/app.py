@@ -1,53 +1,36 @@
 import io
-import torchvision.transforms as transforms
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torchvision.transforms as transforms
+import torchvision.models as models
 from PIL import Image
 from flask import Flask, request
 
-import torch.nn as nn
-import torch.nn.functional as F
-
-
-class NN(nn.Module):
-    def __init__(self, input_size, output_size):
-        super(NN, self).__init__()
-        self.linear_1 = nn.Linear(input_size, 128)
-        self.linear_2 = nn.Linear(128, 64)
-        self.linear_3 = nn.Linear(64, 32)
-        self.linear_4 = nn.Linear(32, output_size)
-
-    def forward(self, x):
-        x = x.view(x.size(0), -1)
-        out = self.linear_1(x)
-        out = F.relu(out)
-        out = self.linear_2(out)
-        out = F.relu(out)
-        out = self.linear_3(out)
-        out = F.relu(out)
-        out = self.linear_4(out)
-        return out
-
-
-CLASSES = {0: 'unripe', 1: 'ripe'}
+CLASSES = {0: 'ripe', 1: 'unripe'}
+TRAIN_MEAN = [0.5537, 0.5463, 0.4591]
+TRAIN_STD = [0.2730, 0.2693, 0.2850]
+IMAGE_SIZE = 200
 
 # Source: https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html
-
-
 app = Flask(__name__)
-# TODO do something with these hideous 'magic' constants
-model = NN(input_size=30000, output_size=2)
-model.load_state_dict(torch.load('avocado_classifier'))
-model.eval()  # TODO remove once training pipeline is setup
+model = models.resnet18(pretrained=True)
+
+num_ftrs = model.fc.in_features
+model.fc = nn.Linear(num_ftrs, len(CLASSES))
+
+model.load_state_dict(torch.load('../../notebook/model'))
+model.eval()
 
 
 def transform_image(image_bytes):
     my_transforms = transforms.Compose([
-        transforms.Resize((100, 100)),
+        transforms.Resize(IMAGE_SIZE),
         transforms.ToTensor(),
-        # transforms.Normalize(
-        #     [0.485, 0.456, 0.406],
-        #     [0.229, 0.224, 0.225])
-        # TODO normalize?
+        transforms.Normalize(
+            mean=TRAIN_MEAN,
+            std=TRAIN_STD
+        )
     ])
     image = Image.open(io.BytesIO(image_bytes))
     return my_transforms(image).unsqueeze(0)
