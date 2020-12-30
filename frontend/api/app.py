@@ -8,9 +8,9 @@ from PIL import Image
 from flask import Flask, request
 
 CLASSES = {0: 'ripe', 1: 'unripe'}
-TRAIN_MEAN = [0.5537, 0.5463, 0.4591]
-TRAIN_STD = [0.2730, 0.2693, 0.2850]
-IMAGE_SIZE = 100
+TRAIN_MEAN = [0.5751, 0.5640, 0.4498]
+TRAIN_STD = [0.2618, 0.2595, 0.2629]
+IMAGE_SIZE = 125
 
 # Source: https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html
 app = Flask(__name__)
