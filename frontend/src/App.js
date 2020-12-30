@@ -30,6 +30,9 @@ function App() {
       <img src={avocado} alt="" width="100px"/>
       <h1>Know your avocado!</h1>
       <input type="file" accept="image/*" capture="environment" onChange={handleImageUploaded}></input>
+      <p>OR</p>
+      <input type="file" accept="image/*"></input>
+      <p></p>
       <img src={uploadedImage && URL.createObjectURL(uploadedImage)} alt="" width="100px"/>
       <button disabled={!uploadedImage} onClick={handlePredictPressed}>Predict ripeness</button>
       {ripeness && confidence && <p>This avocado is {ripeness} with a {confidence.toFixed(2)}% probability!</p>}
