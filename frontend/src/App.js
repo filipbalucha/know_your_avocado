@@ -50,7 +50,12 @@ function App() {
 
   return (
     <React.Fragment>
-      <Segment padded="very" textAlign="center">
+      <Segment
+        basic
+        padded="very"
+        textAlign="center"
+        style={{ display: "flex", minHeight: "100vh", flexDirection: "column" }}
+      >
         <Image centered src={avocado} size="small" />
         <Header as="h1">Know your avocado!</Header>
         <Header as="h3">Say no to unripe avocados.</Header>

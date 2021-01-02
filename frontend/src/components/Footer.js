@@ -21,9 +21,9 @@ export const Footer = (props) => {
       vertical
       style={{
         padding: "1.5em 0em",
-        bottom: 0,
         width: "100%",
-        position: "absolute",
+        bottom: 0,
+        flex: 1,
       }}
     >
       <Container>
