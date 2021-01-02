@@ -12,6 +12,7 @@ import {
 import avocado from "./avocado.png";
 import { TakePictureButton, UploadImageButton } from "./components/Buttons";
 import { Result } from "./components/Result";
+import { Footer } from "./components/Footer";
 
 function App() {
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -48,69 +49,73 @@ function App() {
   };
 
   return (
-    <Segment padded="very" textAlign="center">
-      <Image centered src={avocado} size="small" />
-      <Header as="h1">Know your avocado!</Header>
-      <Segment placeholder stackable>
-        <Grid columns={2} textAlign="center">
-          <Divider vertical>Or</Divider>
-          <Grid.Row verticalAlign="middle">
-            <Grid.Column>
-              <Header icon>
-                <Icon name="photo" />
-              </Header>
-              <TakePictureButton onClick={handleImageUploaded} />
-            </Grid.Column>
-            <Grid.Column>
-              <Header icon>
-                <Icon name="images" />
-              </Header>
-              <UploadImageButton onClick={handleImageUploaded} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Segment>
-      {uploadedImage && (
+    <React.Fragment>
+      <Segment padded="very" textAlign="center">
+        <Image centered src={avocado} size="small" />
+        <Header as="h1">Know your avocado!</Header>
+        <Header as="h3">Say no to unripe avocados.</Header>
         <Segment placeholder stackable>
-          <Grid columns={2} celled="internally" textAlign="center">
+          <Grid columns={2} textAlign="center">
+            <Divider vertical>Or</Divider>
             <Grid.Row verticalAlign="middle">
               <Grid.Column>
-                <Transition
-                  visible={uploadedImage}
-                  animation="fade"
-                  duration={500}
-                >
-                  <Image
-                    centered
-                    rounded
-                    src={uploadedImage && URL.createObjectURL(uploadedImage)}
-                    size="large"
-                    verticalAlign="middle"
-                  />
-                </Transition>
-                <Divider horizontal />
-                {status === "AWAIT" && (
-                  <Button
-                    disabled={!uploadedImage}
-                    onClick={handlePredictPressed}
-                  >
-                    Predict
-                  </Button>
-                )}
+                <Header icon>
+                  <Icon name="photo" />
+                </Header>
+                <TakePictureButton onClick={handleImageUploaded} />
               </Grid.Column>
-              {status !== "AWAIT" && (
-                <Grid.Column>
-                  <Result
-                    loading={status === "LOADING"}
-                    response={response}
-                  ></Result>
-                </Grid.Column>
-              )}
+              <Grid.Column>
+                <Header icon>
+                  <Icon name="images" />
+                </Header>
+                <UploadImageButton onClick={handleImageUploaded} />
+              </Grid.Column>
             </Grid.Row>
           </Grid>
         </Segment>
-      )}
-    </Segment>
+        {uploadedImage && (
+          <Segment placeholder stackable>
+            <Grid columns={2} celled="internally" textAlign="center">
+              <Grid.Row verticalAlign="middle">
+                <Grid.Column>
+                  <Transition
+                    visible={uploadedImage}
+                    animation="fade"
+                    duration={500}
+                  >
+                    <Image
+                      centered
+                      rounded
+                      src={uploadedImage && URL.createObjectURL(uploadedImage)}
+                      size="large"
+                      verticalAlign="middle"
+                    />
+                  </Transition>
+                  <Divider horizontal />
+                  {status === "AWAIT" && (
+                    <Button
+                      disabled={!uploadedImage}
+                      onClick={handlePredictPressed}
+                    >
+                      Predict
+                    </Button>
+                  )}
+                </Grid.Column>
+                {status !== "AWAIT" && (
+                  <Grid.Column>
+                    <Result
+                      loading={status === "LOADING"}
+                      response={response}
+                    ></Result>
+                  </Grid.Column>
+                )}
+              </Grid.Row>
+            </Grid>
+          </Segment>
+        )}
+      </Segment>
+      <Footer />
+    </React.Fragment>
   );
 }
 
