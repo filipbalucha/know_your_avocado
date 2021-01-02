@@ -1,23 +1,29 @@
-import avocado from "./avocado.png";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Segment,
   Button,
+  Divider,
   Grid,
   Header,
   Icon,
-  Divider,
   Image,
+  Segment,
   Transition,
 } from "semantic-ui-react";
+import avocado from "./avocado.png";
 import { TakePictureButton, UploadImageButton } from "./components/Buttons";
+import { Result } from "./components/Result";
 
 function App() {
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [category, setCategory] = useState();
-  const [confidence, setConfidence] = useState();
+  const [status, setStatus] = useState("AWAIT");
+  const [response, setResponse] = useState();
+
+  useEffect(() => {
+    setStatus("AWAIT");
+  }, [uploadedImage]);
 
   const handleImageUploaded = (event) => {
+    event.preventDefault();
     const image = event.target.files[0];
     setUploadedImage(image);
   };
@@ -25,34 +31,20 @@ function App() {
   const handlePredictPressed = () => {
     const data = new FormData();
     data.append("file", uploadedImage);
+    setStatus("LOADING");
     fetch("/predict", {
       method: "POST",
       body: data,
     })
       .then((res) => res.json())
       .then((data) => {
-        setCategory(data.category);
-        setConfidence(data.confidence * 100);
-      });
-  };
-
-  const Result = (props) => {
-    let message;
-    if (category == null || confidence == null) {
-      return <React.Fragment />;
-    } else if (category === "other") {
-      message = "Sorry, I was unable to spot any 🥑";
-    } else {
-      let temp = category.replace("avocado_", "");
-      message = `This 🥑 is ${temp} with a ${confidence.toFixed(2)}%
-      probability!`;
-    }
-    return (
-      <React.Fragment>
-        <Divider />
-        <p>{message}</p>
-      </React.Fragment>
-    );
+        setTimeout(() => {
+          setResponse(data);
+          setStatus("FINISHED");
+          console.log(data);
+        }, 500); // TODO: simulate request timeout
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -78,22 +70,46 @@ function App() {
           </Grid.Row>
         </Grid>
       </Segment>
-      <Segment placeholder>
-        <Transition visible={uploadedImage} animation="fade" duration={500}>
-          <Image
-            centered
-            rounded
-            src={uploadedImage && URL.createObjectURL(uploadedImage)}
-            size="large"
-            verticalAlign="middle"
-          />
-        </Transition>
-        <Divider horizontal />
-        <Button disabled={!uploadedImage} onClick={handlePredictPressed}>
-          Predict
-        </Button>
-        <Result category={category} confidence={confidence}></Result>
-      </Segment>
+      {uploadedImage && (
+        <Segment placeholder stackable>
+          <Grid columns={2} celled="internally" textAlign="center">
+            <Grid.Row verticalAlign="middle">
+              <Grid.Column>
+                <Transition
+                  visible={uploadedImage}
+                  animation="fade"
+                  duration={500}
+                >
+                  <Image
+                    centered
+                    rounded
+                    src={uploadedImage && URL.createObjectURL(uploadedImage)}
+                    size="large"
+                    verticalAlign="middle"
+                  />
+                </Transition>
+                <Divider horizontal />
+                {status === "AWAIT" && (
+                  <Button
+                    disabled={!uploadedImage}
+                    onClick={handlePredictPressed}
+                  >
+                    Predict
+                  </Button>
+                )}
+              </Grid.Column>
+              {status !== "AWAIT" && (
+                <Grid.Column>
+                  <Result
+                    loading={status === "LOADING"}
+                    response={response}
+                  ></Result>
+                </Grid.Column>
+              )}
+            </Grid.Row>
+          </Grid>
+        </Segment>
+      )}
     </Segment>
   );
 }
