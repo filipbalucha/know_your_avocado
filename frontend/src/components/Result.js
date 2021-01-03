@@ -12,7 +12,8 @@ export const Result = (props) => {
   if (!fruit_visible) {
     return (
       <React.Fragment>
-        <p>{"Sorry, I was unable to spot any 🥑"}</p>
+        <Header as="h3">Sorry, I was unable to spot any 🥑</Header>
+        <p>Could you try retaking the photo?</p>
       </React.Fragment>
     );
   }
