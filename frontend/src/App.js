@@ -59,7 +59,7 @@ function App() {
         <Image centered src={avocado} size="small" />
         <Header as="h1">Know your avocado!</Header>
         <Header as="h3">Say no to unripe avocados.</Header>
-        <Segment placeholder stackable>
+        <Segment placeholder>
           <Grid columns={2} textAlign="center">
             <Divider vertical>Or</Divider>
             <Grid.Row verticalAlign="middle">
@@ -79,8 +79,8 @@ function App() {
           </Grid>
         </Segment>
         {uploadedImage && (
-          <Segment placeholder stackable>
-            <Grid columns={2} celled="internally" textAlign="center">
+          <Segment placeholder>
+            <Grid stackable columns={2} celled="internally" textAlign="center">
               <Grid.Row verticalAlign="middle">
                 <Grid.Column>
                   <Transition
@@ -92,7 +92,7 @@ function App() {
                       centered
                       rounded
                       src={uploadedImage && URL.createObjectURL(uploadedImage)}
-                      size="large"
+                      size="medium"
                       verticalAlign="middle"
                     />
                   </Transition>
@@ -111,7 +111,7 @@ function App() {
                     <Result
                       loading={status === "LOADING"}
                       response={response}
-                    ></Result>
+                    />
                   </Grid.Column>
                 )}
               </Grid.Row>
