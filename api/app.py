@@ -18,7 +18,7 @@ IDX_OTHER = CATEGORIES.index(CAT_OTHER)
 CATEGORIES_NO_OTHER = [cat for cat in CATEGORIES if cat is not CAT_OTHER]
 
 # Source: https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html
-app = Flask(__name__, static_folder='../build', static_url_path='')
+app = Flask(__name__, static_folder='../frontend/build', static_url_path='')
 cors = CORS(app)
 
 model = models.resnet18(pretrained=True)
@@ -26,7 +26,7 @@ model = models.resnet18(pretrained=True)
 num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, len(CATEGORIES))
 
-model.load_state_dict(torch.load('../../notebook/model'))
+model.load_state_dict(torch.load('../notebook/model'))
 model.eval()
 
 
