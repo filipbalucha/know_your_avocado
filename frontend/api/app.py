@@ -5,7 +5,8 @@ import torch.nn.functional as F
 import torchvision.transforms as transforms
 import torchvision.models as models
 from PIL import Image
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
+from flask_cors import CORS
 
 CATEGORIES = ['avocado_ripe', 'avocado_unripe', 'other']
 TRAIN_MEAN = [0.5926, 0.5690, 0.4799]
@@ -17,7 +18,8 @@ IDX_OTHER = CATEGORIES.index(CAT_OTHER)
 CATEGORIES_NO_OTHER = [cat for cat in CATEGORIES if cat is not CAT_OTHER]
 
 # Source: https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../build', static_url_path='')
+cors = CORS(app)
 
 model = models.resnet18(pretrained=True)
 
@@ -81,6 +83,9 @@ def predict():
         response = get_prediction(image_bytes=img_bytes)
         return response, 200
 
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     app.run()
