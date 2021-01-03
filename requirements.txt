@@ -12,7 +12,7 @@ Pillow==8.0.1
 pyparsing==2.4.7
 python-dateutil==2.8.1
 six==1.15.0
-torch==1.7.1
-torchvision==0.8.2
+https://download.pytorch.org/whl/cpu/torch-1.7.1%2Bcpu-cp36-cp36m-linux_x86_64.whl  # torch==1.7.1; use only CPU to reduce size
+https://download.pytorch.org/whl/cpu/torchvision-0.8.2%2Bcpu-cp36-cp36m-linux_x86_64.whl  # torchvision==0.8.2; use only CPU to reduce size
 typing-extensions==3.7.4.3
 Werkzeug==1.0.1

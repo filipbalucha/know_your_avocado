@@ -183,3 +183,4 @@ frontend/.eslintcache
 *.jpeg
 *.png
 temp.ipynb
+requirements_local.txt
