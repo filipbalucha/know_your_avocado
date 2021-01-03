@@ -9,7 +9,7 @@ import {
   Segment,
   Transition,
 } from "semantic-ui-react";
-import avocado from "./avocado.png";
+import avocado from "./avocado.PNG";
 import { TakePictureButton, UploadImageButton } from "./components/Buttons";
 import { Result } from "./components/Result";
 import { Footer } from "./components/Footer";
