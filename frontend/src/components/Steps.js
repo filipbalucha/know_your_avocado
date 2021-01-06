@@ -3,7 +3,7 @@ import { Step, Icon } from "semantic-ui-react";
 export const Steps = (props) => {
   const { status } = props;
   return (
-    <Step.Group>
+    <Step.Group unstackable>
       <Step active={status === "AWAIT"}>
         <Icon name="camera" />
         <Step.Content>
