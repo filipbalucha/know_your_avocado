@@ -17,9 +17,7 @@ function App() {
   }, [uploadedImages]);
 
   const handleImageUploaded = (event) => {
-    console.log("here1");
     event.preventDefault();
-    console.log("here");
     const image = event.target.files[0];
     // Append image to list of images
     setUploadedImages((prevImages) => [...prevImages, image]);
@@ -41,7 +39,6 @@ function App() {
         setTimeout(() => {
           setResponse(data);
           setStatus("FINISHED");
-          console.log(data);
         }, 500); // TODO: simulate request timeout
       })
       .catch((err) => console.error(err));

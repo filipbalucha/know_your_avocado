@@ -71,8 +71,6 @@ export const ImageCarousel = (props) => {
   const { images, onPredictPressed, onAddPressed } = props;
   const [imageUrls, setImageUrls] = useState([]);
 
-  console.log(images.length);
-
   useEffect(() => {
     // Revoke URLs to prevent memory leaks
     // Source: post by Enioluwa Segun @https://stackoverflow.com/questions/57315551/react-uploading-multiple-images
@@ -91,12 +89,7 @@ export const ImageCarousel = (props) => {
         ))}
         {images.length < MAX_IMAGES && (
           <List.Item>
-            <AddPhoto
-              onClick={(e) => {
-                console.log("hello");
-                onAddPressed(e);
-              }}
-            />
+            <AddPhoto onClick={onAddPressed} />
           </List.Item>
         )}
       </List>
