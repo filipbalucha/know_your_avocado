@@ -1,37 +1,36 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Divider,
-  Grid,
-  Header,
-  Icon,
-  Image,
-  Segment,
-  Transition,
-} from "semantic-ui-react";
+import { Header, Image, Segment } from "semantic-ui-react";
 import avocado from "./avocado.PNG";
-import { TakePictureButton, UploadImageButton } from "./components/Buttons";
 import { Result } from "./components/Result";
 import { Footer } from "./components/Footer";
+import { WelcomeElement } from "./components/WelcomeElement";
+import { ImageCarousel } from "./components/ImageCarousel";
+// import { Steps } from "./components/Steps";
 
 function App() {
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImages, setUploadedImages] = useState([]);
   const [status, setStatus] = useState("AWAIT");
   const [response, setResponse] = useState();
 
   useEffect(() => {
     setStatus("AWAIT");
-  }, [uploadedImage]);
+  }, [uploadedImages]);
 
   const handleImageUploaded = (event) => {
+    console.log("here1");
     event.preventDefault();
+    console.log("here");
     const image = event.target.files[0];
-    setUploadedImage(image);
+    // Append image to list of images
+    setUploadedImages((prevImages) => [...prevImages, image]);
   };
 
   const handlePredictPressed = () => {
     const data = new FormData();
-    data.append("file", uploadedImage);
+    // TODO: How to add multiple files?
+    uploadedImages.forEach((image, i) => {
+      data.append("file", image);
+    });
     setStatus("LOADING");
     fetch("/predict", {
       method: "POST",
@@ -48,6 +47,21 @@ function App() {
       .catch((err) => console.error(err));
   };
 
+  const Body = () => {
+    // const { status, response, handlePredictPressed } = props; // TODO: decide if necessary
+    if (status !== "AWAIT")
+      return <Result loading={status === "LOADING"} response={response} />;
+    if (uploadedImages.length)
+      return (
+        <ImageCarousel
+          images={uploadedImages}
+          onPredictPressed={handlePredictPressed}
+          onAddPressed={handleImageUploaded}
+        />
+      );
+    return <WelcomeElement onClick={handleImageUploaded} />;
+  };
+
   return (
     <React.Fragment>
       <Segment
@@ -59,65 +73,8 @@ function App() {
         <Image centered src={avocado} size="small" />
         <Header as="h1">Know your avocado!</Header>
         <Header as="h3">Say no to unripe avocados.</Header>
-        <Segment placeholder>
-          <Grid columns={2} textAlign="center">
-            <Divider vertical>Or</Divider>
-            <Grid.Row verticalAlign="middle">
-              <Grid.Column>
-                <Header icon>
-                  <Icon name="photo" />
-                </Header>
-                <TakePictureButton onClick={handleImageUploaded} />
-              </Grid.Column>
-              <Grid.Column>
-                <Header icon>
-                  <Icon name="images" />
-                </Header>
-                <UploadImageButton onClick={handleImageUploaded} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
-        {uploadedImage && (
-          <Segment placeholder>
-            <Grid stackable columns={2} celled="internally" textAlign="center">
-              <Grid.Row verticalAlign="middle">
-                <Grid.Column>
-                  <Transition
-                    visible={uploadedImage}
-                    animation="fade"
-                    duration={500}
-                  >
-                    <Image
-                      centered
-                      rounded
-                      src={uploadedImage && URL.createObjectURL(uploadedImage)}
-                      size="medium"
-                      verticalAlign="middle"
-                    />
-                  </Transition>
-                  <Divider horizontal />
-                  {status === "AWAIT" && (
-                    <Button
-                      disabled={!uploadedImage}
-                      onClick={handlePredictPressed}
-                    >
-                      Predict
-                    </Button>
-                  )}
-                </Grid.Column>
-                {status !== "AWAIT" && (
-                  <Grid.Column>
-                    <Result
-                      loading={status === "LOADING"}
-                      response={response}
-                    />
-                  </Grid.Column>
-                )}
-              </Grid.Row>
-            </Grid>
-          </Segment>
-        )}
+        {/* <Steps /> */}
+        <Body />
       </Segment>
       <Footer />
     </React.Fragment>
