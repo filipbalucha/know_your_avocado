@@ -37,15 +37,15 @@ const UploadImage = (props) => (
 );
 
 export const WelcomeElement = (props) => {
-  const { useCamera } = props;
+  const { allowCamera, onClick } = props;
   let element;
-  if (!useCamera) {
+  if (!allowCamera) {
     element = (
       <Segment basic>
         <Header icon>
           <Icon name="images" />
         </Header>
-        <UploadImage onClick={props.onClick} />
+        <UploadImage onClick={onClick} />
       </Segment>
     );
   } else {
@@ -57,13 +57,13 @@ export const WelcomeElement = (props) => {
             <Header icon>
               <Icon name="photo" />
             </Header>
-            <TakePicture onClick={props.onClick} />
+            <TakePicture onClick={onClick} />
           </Grid.Column>
           <Grid.Column>
             <Header icon>
               <Icon name="images" />
             </Header>
-            <UploadImage onClick={props.onClick} />
+            <UploadImage onClick={onClick} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

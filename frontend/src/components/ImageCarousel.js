@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Button,
   List,
@@ -6,70 +6,71 @@ import {
   Segment,
   Image,
   Popup,
-  Icon,
 } from "semantic-ui-react";
+import { useMediaQuery } from "react-responsive";
 
-const TakePicture = (props) => (
-  <React.Fragment>
-    <Button as="label" htmlFor="cameraInput" animated="fade">
-      <Button.Content visible>
-        <Icon name="photo" />
-      </Button.Content>
-      <Button.Content hidden>Picture</Button.Content>
-    </Button>
-    <input
-      id="cameraInput"
-      type="file"
-      accept="image/*"
-      capture="environment"
-      hidden
-      onChange={props.onClick}
-    />
-  </React.Fragment>
-);
-
-const UploadImage = (props) => (
-  <React.Fragment>
-    <Button as="label" htmlFor="libraryInput" animated="fade">
-      <Button.Content visible>
-        <Icon name="images" />
-      </Button.Content>
-      <Button.Content hidden>File</Button.Content>
-    </Button>
-    <input
-      id="libraryInput"
-      type="file"
-      accept="image/*"
-      multiple
-      hidden
-      onChange={props.onClick}
-    />
-  </React.Fragment>
-);
-
-const AddPhoto = (props) => {
+const TakePicture = ({ onClick }) => {
+  const cameraInputRef = useRef(null);
   return (
-    <Popup
-      wide
-      flowing
-      size="large"
-      trigger={<Button icon="plus" />}
-      on={["hover", "click"]}
-      mouseEnterDelay={7000}
-      mouseLeaveDelay={7000}
-    >
-      <Button.Group>
-        <TakePicture onClick={props.onClick} />
-        <Button.Or />
-        <UploadImage onClick={props.onClick} />
-      </Button.Group>
-    </Popup>
+    <React.Fragment>
+      <Button icon="camera" onClick={() => cameraInputRef.current.click()} />
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        hidden
+        onChange={onClick}
+      />
+    </React.Fragment>
   );
 };
 
+const UploadImage = ({ onClick, icon }) => {
+  const imageInputRef = useRef(null);
+  return (
+    <React.Fragment>
+      <Button icon={icon} onClick={() => imageInputRef.current.click()} />
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        hidden
+        onChange={onClick}
+      />
+    </React.Fragment>
+  );
+};
+
+const AddPhoto = ({ allowCamera, onClick }) => {
+  if (!allowCamera) {
+    return <UploadImage onClick={onClick} icon="plus" />;
+  } else {
+    return (
+      <Popup
+        wide
+        flowing
+        size="large"
+        trigger={<Button icon="plus" />}
+        on={["hover", "click"]}
+        mouseEnterDelay={7000}
+        mouseLeaveDelay={7000}
+      >
+        <Button.Group compact>
+          <TakePicture onClick={onClick} icon="image" />
+          <Button.Or />
+          <UploadImage onClick={onClick} />
+        </Button.Group>
+      </Popup>
+    );
+  }
+};
+
 export const ImageCarousel = (props) => {
+  const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const MAX_IMAGES = 4;
-  const { images, onPredictPressed, onAddPressed } = props;
+  const { images, onPredictPressed, onAddPressed, allowCamera } = props;
   const [imageUrls, setImageUrls] = useState([]);
 
   useEffect(() => {
@@ -99,7 +100,7 @@ export const ImageCarousel = (props) => {
 
   return (
     <Segment placeholder>
-      <List animated horizontal verticalAlign="middle">
+      <List horizontal={isDesktopOrLaptop} verticalAlign="middle">
         {imageUrls.map((imageUrl, index) => (
           <List.Item key={index}>
             <Image />
@@ -114,7 +115,7 @@ export const ImageCarousel = (props) => {
         {images.length < MAX_IMAGES && (
           <List.Item>
             <List.Content>
-              <AddPhoto onClick={onAddPressed} />
+              <AddPhoto allowCamera={allowCamera} onClick={onAddPressed} />
             </List.Content>
           </List.Item>
         )}
