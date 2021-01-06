@@ -36,24 +36,38 @@ const UploadImage = (props) => (
   </React.Fragment>
 );
 
-export const WelcomeElement = (props) => (
-  <Segment placeholder>
-    <Grid columns={2} textAlign="center">
-      <Divider vertical>Or</Divider>
-      <Grid.Row verticalAlign="middle">
-        <Grid.Column>
-          <Header icon>
-            <Icon name="photo" />
-          </Header>
-          <TakePicture onClick={props.onClick} />
-        </Grid.Column>
-        <Grid.Column>
-          <Header icon>
-            <Icon name="images" />
-          </Header>
-          <UploadImage onClick={props.onClick} />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  </Segment>
-);
+export const WelcomeElement = (props) => {
+  const { useCamera } = props;
+  let element;
+  if (!useCamera) {
+    element = (
+      <Segment basic>
+        <Header icon>
+          <Icon name="images" />
+        </Header>
+        <UploadImage onClick={props.onClick} />
+      </Segment>
+    );
+  } else {
+    element = (
+      <Grid columns={2} textAlign="center">
+        <Divider vertical>Or</Divider>
+        <Grid.Row verticalAlign="middle">
+          <Grid.Column>
+            <Header icon>
+              <Icon name="photo" />
+            </Header>
+            <TakePicture onClick={props.onClick} />
+          </Grid.Column>
+          <Grid.Column>
+            <Header icon>
+              <Icon name="images" />
+            </Header>
+            <UploadImage onClick={props.onClick} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    );
+  }
+  return <Segment placeholder>{element}</Segment>;
+};

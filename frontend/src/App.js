@@ -13,6 +13,7 @@ import { Footer } from "./components/Footer";
 import { WelcomeElement } from "./components/WelcomeElement";
 import { ImageCarousel } from "./components/ImageCarousel";
 import { Steps } from "./components/Steps";
+import { isBrowser } from "react-device-detect";
 
 function App() {
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -26,9 +27,7 @@ function App() {
 
   useEffect(() => {
     if (!error) return;
-    const timer = setTimeout(() => {
-      setError(false);
-    }, 2000);
+    const timer = setTimeout(() => setError(false), 2500);
     return () => clearTimeout(timer);
   }, [error]);
 
@@ -42,7 +41,7 @@ function App() {
     const data = new FormData();
     // TODO: How to add multiple files?
     uploadedImages.forEach((image, i) => {
-      data.append("files[]", image);
+      data.append("file[]", image);
     });
     setStatus("LOADING");
     fetch("/predict", {
@@ -63,12 +62,24 @@ function App() {
       });
   };
 
-  const MessageExampleNegative = () => (
-    <Message negative>
-      <Message.Header>Server error</Message.Header>
-      <p>Please try again later</p>
-    </Message>
-  );
+  const ErrorMessage = ({ visible }) => {
+    const style = {
+      position: "absolute",
+      width: "20vw",
+      bottom: 10,
+      right: 10,
+    };
+    return (
+      <Transition visible={error} animation="fade up" duration={500}>
+        <Container style={style}>
+          <Message negative>
+            <Message.Header>Server error</Message.Header>
+            <p>Please try again later</p>
+          </Message>
+        </Container>
+      </Transition>
+    );
+  };
 
   const handleImageRemoved = (index) => {
     if (index === -1) return;
@@ -88,9 +99,12 @@ function App() {
           onPredictPressed={handlePredictPressed}
           onAddPressed={handleImageUploaded}
           onRemovePressed={handleImageRemoved}
+          allowCamera={!isBrowser}
         />
       );
-    return <WelcomeElement onClick={handleImageUploaded} />;
+    return (
+      <WelcomeElement allowCamera={!isBrowser} onClick={handleImageUploaded} />
+    );
   };
 
   return (
@@ -108,18 +122,8 @@ function App() {
         <Body />
       </Segment>
 
-      <Transition visible={error} animation="fade up" duration={500}>
-        <Container
-          style={{
-            position: "absolute",
-            width: "20vw",
-            bottom: 10,
-            right: 10,
-          }}
-        >
-          <MessageExampleNegative />
-        </Container>
-      </Transition>
+      <ErrorMessage visible={error} />
+
       <Footer />
     </React.Fragment>
   );

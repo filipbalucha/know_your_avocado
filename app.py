@@ -7,6 +7,7 @@ import torchvision.models as models
 from PIL import Image
 from flask import Flask, request, send_from_directory
 from flask_cors import CORS
+from functools import reduce
 
 CATEGORIES = ['avocado_ripe', 'avocado_unripe', 'other']
 TRAIN_MEAN = [0.5926, 0.5690, 0.4799]
@@ -48,7 +49,10 @@ def get_prediction(image_bytes):
 
     logits = model.forward(tensor)
     probas = F.softmax(logits, dim=-1)
-    _, y_hat = probas.max(1)
+    return probas
+
+def process_probas(ps):
+    _, y_hat = ps.max(1)
     predicted_idx = y_hat.item()
     predicted_cat = CATEGORIES[predicted_idx]
 
@@ -58,29 +62,40 @@ def get_prediction(image_bytes):
     else:
         response['fruit_visible'] = True
         # Calculate softmax over all categories except 'other'
-        new_logits = logits.flatten().tolist()
-        del new_logits[IDX_OTHER]
-        new_logits = torch.Tensor(new_logits)
-        new_probas = F.softmax(new_logits, dim=-1).flatten().tolist()
+        new_ps = ps.flatten().tolist()
+        del new_ps[IDX_OTHER]
+        new_ps = torch.Tensor(new_ps)
+        # Scale so probabilities sum up to 1
+        ps_sum = torch.sum(new_ps)
+        coef = 1 / ps_sum
+        new_ps = torch.mul(new_ps, coef)
+        new_ps = new_ps.flatten().tolist()
         # Store category with highest probability
         response['result'] = {
             'category': predicted_cat,
-            'probability': max(new_probas)
+            'probability': max(new_ps)
         }
         # Store summary of all categories and associated probabilities
         response['summary'] = {
             'categories': CATEGORIES_NO_OTHER,
-            'probabilities': new_probas
+            'probabilities': new_ps
         }
     return response
-
 
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-        file = request.files['file']
-        img_bytes = file.read()
-        response = get_prediction(image_bytes=img_bytes)
+        files = request.files.getlist('file[]')
+        ps = []
+        len_ps = len(files)
+        for file in files: 
+            img_bytes = file.read()
+            p = get_prediction(image_bytes=img_bytes)
+            ps.append(p)
+        sum_ps = reduce(torch.add, ps)
+        avg_ps = torch.div(sum_ps, len_ps)
+        
+        response = process_probas(avg_ps)
         return response, 200
 
 @app.route('/')
