@@ -114,13 +114,14 @@ export const ImageCarousel = (props) => {
         ))}
         {images.length < MAX_IMAGES && (
           <List.Item>
+            <Image />
             <List.Content>
               <AddPhoto allowCamera={allowCamera} onClick={onAddPressed} />
             </List.Content>
           </List.Item>
         )}
       </List>
-      <Divider horizontal />
+      <Divider />
       <Button disabled={images.length === 0} onClick={onPredictPressed}>
         Predict
       </Button>
