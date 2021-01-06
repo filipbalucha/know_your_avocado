@@ -10,15 +10,9 @@ import {
 
 const TakePicture = (props) => (
   <React.Fragment>
-    <Button
-      as="label"
-      htmlFor="file"
-      type="button"
-      animated="fade"
-      content="Take a Picture"
-    />
+    <Button as="label" htmlFor="cameraInput" content="Take a Picture" />
     <input
-      id="file"
+      id="cameraInput"
       type="file"
       accept="image/*"
       capture="environment"
@@ -30,15 +24,9 @@ const TakePicture = (props) => (
 
 const UploadImage = (props) => (
   <React.Fragment>
-    <Button
-      as="label"
-      htmlFor="file"
-      type="button"
-      animated="fade"
-      content="Upload an Image"
-    />
+    <Button as="label" htmlFor="libraryInput" content="Upload an Image" />
     <input
-      id="file"
+      id="libraryInput"
       type="file"
       accept="image/*"
       hidden

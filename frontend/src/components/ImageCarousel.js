@@ -11,14 +11,14 @@ import {
 
 const TakePicture = (props) => (
   <React.Fragment>
-    <Button as="label" htmlFor="file" type="button" animated="fade">
+    <Button as="label" htmlFor="cameraInput" animated="fade">
       <Button.Content visible>
         <Icon name="photo" />
       </Button.Content>
       <Button.Content hidden>Picture</Button.Content>
     </Button>
     <input
-      id="file"
+      id="cameraInput"
       type="file"
       accept="image/*"
       capture="environment"
@@ -30,14 +30,14 @@ const TakePicture = (props) => (
 
 const UploadImage = (props) => (
   <React.Fragment>
-    <Button as="label" htmlFor="file" type="button" animated="fade">
+    <Button as="label" htmlFor="libraryInput" animated="fade">
       <Button.Content visible>
         <Icon name="images" />
       </Button.Content>
       <Button.Content hidden>File</Button.Content>
     </Button>
     <input
-      id="file"
+      id="libraryInput"
       type="file"
       accept="image/*"
       hidden
@@ -104,7 +104,7 @@ export const ImageCarousel = (props) => {
             <Image />
             <List.Content>
               <Segment basic>
-                <Image centered rounded src={imageUrl} size="small" />
+                <Image centered rounded src={imageUrl} size="medium" />
                 <RemoveButton onClick={() => props.onRemovePressed(index)} />
               </Segment>
             </List.Content>
