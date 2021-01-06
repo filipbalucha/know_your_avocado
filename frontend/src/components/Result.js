@@ -1,6 +1,6 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
-import { Grid, Loader, Header, Popup } from "semantic-ui-react";
+import { Grid, Loader, Header, Popup, Segment } from "semantic-ui-react";
 
 const Graph = (props) => {
   const NUM_DP = 2;
@@ -38,7 +38,13 @@ const Graph = (props) => {
         />
       </Grid.Row>
       <Grid.Row>
-        <Doughnut data={data} />
+        <Segment basic style={{ height: "50vh" }}>
+          <Doughnut
+            data={data}
+            // height={"30%"}
+            options={{ maintainAspectRatio: false }}
+          />
+        </Segment>
       </Grid.Row>
     </Grid>
   );
@@ -53,12 +59,13 @@ const NotVisibleMessage = () => (
 
 export const Result = (props) => {
   const { loading } = props;
-  const { fruit_visible } = props.response;
+  let out;
   if (loading) {
-    return <Loader active>Loading</Loader>;
-  } else if (fruit_visible) {
-    return <Graph {...props} />;
+    out = <Loader active>Loading</Loader>;
+  } else if (props.response.fruit_visible) {
+    out = <Graph {...props} />;
   } else {
-    return <NotVisibleMessage />;
+    out = <NotVisibleMessage />;
   }
+  return <Segment placeholder>{out}</Segment>;
 };
