@@ -29,6 +29,7 @@ const UploadImage = (props) => (
       id="libraryInput"
       type="file"
       accept="image/*"
+      multiple
       hidden
       onChange={props.onClick}
     />

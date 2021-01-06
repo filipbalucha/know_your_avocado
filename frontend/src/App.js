@@ -18,9 +18,8 @@ function App() {
 
   const handleImageUploaded = (event) => {
     event.preventDefault();
-    const image = event.target.files[0];
     // Append image to list of images
-    setUploadedImages((prevImages) => [...prevImages, image]);
+    setUploadedImages((prevImages) => [...prevImages, ...event.target.files]);
   };
 
   const handlePredictPressed = () => {
