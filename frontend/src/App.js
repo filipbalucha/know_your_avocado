@@ -44,6 +44,13 @@ function App() {
       .catch((err) => console.error(err));
   };
 
+  const handleImageRemoved = (index) => {
+    if (index === -1) return;
+    const images = Array.from(uploadedImages);
+    images.splice(index);
+    setUploadedImages(images);
+  };
+
   const Body = () => {
     // const { status, response, handlePredictPressed } = props; // TODO: decide if necessary
     if (status !== "AWAIT")
@@ -54,6 +61,7 @@ function App() {
           images={uploadedImages}
           onPredictPressed={handlePredictPressed}
           onAddPressed={handleImageUploaded}
+          onRemovePressed={handleImageRemoved}
         />
       );
     return <WelcomeElement onClick={handleImageUploaded} />;

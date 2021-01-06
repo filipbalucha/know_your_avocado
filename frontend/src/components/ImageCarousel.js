@@ -3,6 +3,7 @@ import {
   Button,
   List,
   Divider,
+  Grid,
   Segment,
   Image,
   Popup,
@@ -79,6 +80,23 @@ export const ImageCarousel = (props) => {
     setImageUrls(urls);
   }, [images]);
 
+  const RemoveButton = (props) => {
+    return (
+      <Button
+        size="medium"
+        icon="cancel"
+        color="red"
+        circular
+        style={{
+          position: "absolute",
+          top: 20,
+          left: 20,
+        }}
+        onClick={props.onClick}
+      />
+    );
+  };
+
   return (
     <Segment placeholder>
       <List animated horizontal verticalAlign="middle">
@@ -86,28 +104,11 @@ export const ImageCarousel = (props) => {
           <List.Item key={index}>
             <Segment basic>
               <Image centered rounded src={imageUrl} size="medium" />
-              <Button
-                size="medium"
-                icon="cancel"
-                color="red"
-                circular
-                style={{
-                  position: "absolute",
-                  top: 20,
-                  left: 20,
-                }}
-                onClick={() => {
-                  console.log(`drop ${index}`);
-                }}
-              />
+              <RemoveButton onClick={() => props.onRemovePressed(index)} />
             </Segment>
           </List.Item>
         ))}
-        {images.length < MAX_IMAGES && (
-          <List.Item>
-            <AddPhoto onClick={onAddPressed} />
-          </List.Item>
-        )}
+        {images.length < MAX_IMAGES && <AddPhoto onClick={onAddPressed} />}
       </List>
       <Divider horizontal />
       <Button disabled={images.length === 0} onClick={onPredictPressed}>
