@@ -39,7 +39,6 @@ function App() {
 
   const handlePredictPressed = () => {
     const data = new FormData();
-    // TODO: How to add multiple files?
     uploadedImages.forEach((image, i) => {
       data.append("file[]", image);
     });
@@ -113,11 +112,15 @@ function App() {
         basic
         padded="very"
         textAlign="center"
-        style={{ display: "flex", minHeight: "100vh", flexDirection: "column" }}
+        style={{
+          display: "flex",
+          minHeight: "100vh",
+          flexDirection: "column",
+        }}
       >
         <Image centered src={avocado} size="small" />
-        <Header as="h1">Know your avocado!</Header>
-        <Header as="h3">Say no to unripe avocados.</Header>
+        <Header as="h1">Know Your Avocado!</Header>
+        <p>Say No to Unripe Avocados.</p>
         <Steps />
         <Body />
       </Segment>
