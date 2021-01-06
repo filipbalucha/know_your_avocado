@@ -84,7 +84,23 @@ export const ImageCarousel = (props) => {
       <List animated horizontal verticalAlign="middle">
         {imageUrls.map((imageUrl, index) => (
           <List.Item key={index}>
-            <Image centered rounded src={imageUrl} size="medium" />
+            <Segment basic>
+              <Image centered rounded src={imageUrl} size="medium" />
+              <Button
+                size="medium"
+                icon="cancel"
+                color="red"
+                circular
+                style={{
+                  position: "absolute",
+                  top: 20,
+                  left: 20,
+                }}
+                onClick={() => {
+                  console.log(`drop ${index}`);
+                }}
+              />
+            </Segment>
           </List.Item>
         ))}
         {images.length < MAX_IMAGES && (
