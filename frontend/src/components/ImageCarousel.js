@@ -3,7 +3,6 @@ import {
   Button,
   List,
   Divider,
-  Grid,
   Segment,
   Image,
   Popup,
@@ -102,13 +101,22 @@ export const ImageCarousel = (props) => {
       <List animated horizontal verticalAlign="middle">
         {imageUrls.map((imageUrl, index) => (
           <List.Item key={index}>
-            <Segment basic>
-              <Image centered rounded src={imageUrl} size="medium" />
-              <RemoveButton onClick={() => props.onRemovePressed(index)} />
-            </Segment>
+            <Image />
+            <List.Content>
+              <Segment basic>
+                <Image centered rounded src={imageUrl} size="small" />
+                <RemoveButton onClick={() => props.onRemovePressed(index)} />
+              </Segment>
+            </List.Content>
           </List.Item>
         ))}
-        {images.length < MAX_IMAGES && <AddPhoto onClick={onAddPressed} />}
+        {images.length < MAX_IMAGES && (
+          <List.Item>
+            <List.Content>
+              <AddPhoto onClick={onAddPressed} />
+            </List.Content>
+          </List.Item>
+        )}
       </List>
       <Divider horizontal />
       <Button disabled={images.length === 0} onClick={onPredictPressed}>
