@@ -1,5 +1,5 @@
 import React from "react";
-import { Doughnut } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 import { Grid, Loader, Header, Popup, Segment } from "semantic-ui-react";
 
 const Graph = (props) => {
@@ -39,16 +39,26 @@ const Graph = (props) => {
       </Grid.Row>
       <Grid.Row>
         <Segment basic style={{ height: "50vh" }}>
-          <Doughnut
-            data={data}
-            // height={"30%"}
-            options={{ maintainAspectRatio: false }}
-          />
+          <Pie data={data} options={{ maintainAspectRatio: false }} />
         </Segment>
       </Grid.Row>
     </Grid>
   );
 };
+
+// const VisibleMessage = (props) => {
+//   const { result } = props.response;
+//   const probability = (result.probability * 100).toFixed(2);
+//   const ripeness = result.category.replace("avocado_", ""); // TODO: temp
+//   return (
+//     <React.Fragment>
+//       <Header as="h3">
+//         This 🥑 is <i>{ripeness}</i>
+//       </Header>
+//       <p>with a {probability}% probability</p>
+//     </React.Fragment>
+//   );
+// };
 
 const NotVisibleMessage = () => (
   <React.Fragment>
@@ -61,11 +71,13 @@ export const Result = (props) => {
   const { loading } = props;
   let out;
   if (loading) {
-    out = <Loader active>Loading</Loader>;
+    out = <Loader active content="Loading" />;
   } else if (props.response.fruit_visible) {
     out = <Graph {...props} />;
+    // out = <VisibleMessage {...props} />;
   } else {
     out = <NotVisibleMessage />;
   }
+
   return <Segment placeholder>{out}</Segment>;
 };
