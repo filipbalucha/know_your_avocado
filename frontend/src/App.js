@@ -5,7 +5,7 @@ import { Result } from "./components/Result";
 import { Footer } from "./components/Footer";
 import { WelcomeElement } from "./components/WelcomeElement";
 import { ImageCarousel } from "./components/ImageCarousel";
-// import { Steps } from "./components/Steps";
+import { Steps } from "./components/Steps";
 
 function App() {
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -47,7 +47,7 @@ function App() {
   const handleImageRemoved = (index) => {
     if (index === -1) return;
     const images = Array.from(uploadedImages);
-    images.splice(index);
+    images.splice(index, 1);
     setUploadedImages(images);
   };
 
@@ -78,7 +78,7 @@ function App() {
         <Image centered src={avocado} size="small" />
         <Header as="h1">Know your avocado!</Header>
         <Header as="h3">Say no to unripe avocados.</Header>
-        {/* <Steps /> */}
+        <Steps />
         <Body />
       </Segment>
       <Footer />
