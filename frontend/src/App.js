@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Header, Image, Segment } from "semantic-ui-react";
+import {
+  Header,
+  Image,
+  Segment,
+  Message,
+  Transition,
+  Container,
+} from "semantic-ui-react";
 import avocado from "./avocado.PNG";
 import { Result } from "./components/Result";
 import { Footer } from "./components/Footer";
@@ -11,10 +18,19 @@ function App() {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [status, setStatus] = useState("AWAIT");
   const [response, setResponse] = useState();
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     setStatus("AWAIT");
   }, [uploadedImages]);
+
+  useEffect(() => {
+    if (!error) return;
+    const timer = setTimeout(() => {
+      setError(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [error]);
 
   const handleImageUploaded = (event) => {
     event.preventDefault();
@@ -26,7 +42,7 @@ function App() {
     const data = new FormData();
     // TODO: How to add multiple files?
     uploadedImages.forEach((image, i) => {
-      data.append("file", image);
+      data.append("files[]", image);
     });
     setStatus("LOADING");
     fetch("/predict", {
@@ -40,8 +56,19 @@ function App() {
           setStatus("FINISHED");
         }, 500); // TODO: simulate request timeout
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setStatus("AWAIT");
+        setError(true);
+      });
   };
+
+  const MessageExampleNegative = () => (
+    <Message negative>
+      <Message.Header>Server error</Message.Header>
+      <p>Please try again later</p>
+    </Message>
+  );
 
   const handleImageRemoved = (index) => {
     if (index === -1) return;
@@ -80,6 +107,19 @@ function App() {
         <Steps />
         <Body />
       </Segment>
+
+      <Transition visible={error} animation="fade up" duration={500}>
+        <Container
+          style={{
+            position: "absolute",
+            width: "20vw",
+            bottom: 10,
+            right: 10,
+          }}
+        >
+          <MessageExampleNegative />
+        </Container>
+      </Transition>
       <Footer />
     </React.Fragment>
   );
