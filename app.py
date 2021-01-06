@@ -51,8 +51,16 @@ def get_prediction(image_bytes):
     probas = F.softmax(logits, dim=-1)
     return probas
 
-def process_probas(ps):
-    _, y_hat = ps.max(1)
+def generate_response(p):
+    """[Generate a response to be returned by the API]
+
+    Args:
+        prediction ([torch.Tensor]): [model's prediction]
+
+    Returns:
+        [dict]: [response]
+    """    
+    _, y_hat = p.max(1)
     predicted_idx = y_hat.item()
     predicted_cat = CATEGORIES[predicted_idx]
 
@@ -61,24 +69,21 @@ def process_probas(ps):
         response['fruit_visible'] = False
     else:
         response['fruit_visible'] = True
-        # Calculate softmax over all categories except 'other'
-        new_ps = ps.flatten().tolist()
-        del new_ps[IDX_OTHER]
-        new_ps = torch.Tensor(new_ps)
+        # Calculate probability distribution ignoring 'other'
+        new_p = p.flatten().tolist()
+        del new_p[IDX_OTHER]
         # Scale so probabilities sum up to 1
-        ps_sum = torch.sum(new_ps)
-        coef = 1 / ps_sum
-        new_ps = torch.mul(new_ps, coef)
-        new_ps = new_ps.flatten().tolist()
+        scale = 1 / sum(new_p)
+        new_p = [scale * x for x in new_p]
         # Store category with highest probability
         response['result'] = {
             'category': predicted_cat,
-            'probability': max(new_ps)
+            'probability': max(new_p)
         }
         # Store summary of all categories and associated probabilities
         response['summary'] = {
             'categories': CATEGORIES_NO_OTHER,
-            'probabilities': new_ps
+            'probabilities': new_p
         }
     return response
 
@@ -86,16 +91,12 @@ def process_probas(ps):
 def predict():
     if request.method == 'POST':
         files = request.files.getlist('file[]')
-        ps = []
-        len_ps = len(files)
-        for file in files: 
-            img_bytes = file.read()
-            p = get_prediction(image_bytes=img_bytes)
-            ps.append(p)
-        sum_ps = reduce(torch.add, ps)
-        avg_ps = torch.div(sum_ps, len_ps)
-        
-        response = process_probas(avg_ps)
+        # Summarise predictions for each file
+        ps = [get_prediction(image_bytes=file.read()) for file in files]
+        ps_sum = reduce(torch.add, ps)
+        ps_avg = torch.div(ps_sum, len(ps))
+        # Process average of all predictions
+        response = generate_response(ps_avg)
         return response, 200
 
 @app.route('/')
