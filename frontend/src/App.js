@@ -110,23 +110,22 @@ function App() {
     <React.Fragment>
       <Segment
         basic
-        padded="very"
+        padded={"very"}
         textAlign="center"
         style={{
           display: "flex",
           minHeight: "100vh",
           flexDirection: "column",
+          margin: 0,
         }}
       >
         <Image centered src={avocado} size="small" />
         <Header as="h1">Know Your Avocado!</Header>
         <p>Say No to Unripe Avocados.</p>
-        <Steps />
+        <Steps status={status} />
         <Body />
       </Segment>
-
       <ErrorMessage visible={error} />
-
       <Footer />
     </React.Fragment>
   );
