@@ -115,16 +115,12 @@ export const ImageCarousel = (props) => {
         >
           Predict
         </Button>
-        <Modal
-          size="tiny"
-          open={modalOpen}
-          onClose={() => console.log("close")}
-        >
+        <Modal size="tiny" open={modalOpen} onClose={() => setModalOpen(false)}>
           <Modal.Header>Upload more images</Modal.Header>
           <Modal.Content>
             <p>
-              Uploading more images can improve prediction. Would you like to do
-              so?
+              Uploading an extra image can improve prediction. Would you like to
+              do so?
             </p>
           </Modal.Content>
           <Modal.Actions>
