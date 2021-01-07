@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Button,
   List,
+  Grid,
   Divider,
   Segment,
   Image,
@@ -49,19 +50,20 @@ const AddPhoto = ({ allowCamera, onClick }) => {
   } else {
     return (
       <Popup
-        wide
-        flowing
-        size="large"
         trigger={<Button icon="plus" />}
-        on={["hover", "click"]}
-        mouseEnterDelay={7000}
-        mouseLeaveDelay={7000}
+        flowing
+        hoverable
+        mouseEnterDelay={150}
+        mouseLeaveDelay={150}
       >
-        <Button.Group compact>
-          <TakePicture onClick={onClick} icon="image" />
-          <Button.Or />
-          <UploadImage onClick={onClick} />
-        </Button.Group>
+        <Grid divided columns="equal">
+          <Grid.Column>
+            <TakePicture onClick={onClick} />
+          </Grid.Column>
+          <Grid.Column>
+            <UploadImage onClick={onClick} icon="image" />
+          </Grid.Column>
+        </Grid>
       </Popup>
     );
   }
@@ -122,7 +124,7 @@ export const ImageCarousel = (props) => {
         )}
       </List>
       <Divider />
-      <Button disabled={images.length === 0} onClick={onPredictPressed}>
+      <Button fluid disabled={images.length === 0} onClick={onPredictPressed}>
         Predict
       </Button>
     </Segment>
