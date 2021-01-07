@@ -6,7 +6,9 @@ import {
   Divider,
   Segment,
   Image,
+  Icon,
   Popup,
+  Modal,
 } from "semantic-ui-react";
 import { useMediaQuery } from "react-responsive";
 
@@ -100,6 +102,50 @@ export const ImageCarousel = (props) => {
     );
   };
 
+  const PredictButton = ({ numImagesUploaded, onClick }) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    return (
+      <React.Fragment>
+        <Button
+          fluid
+          onClick={() => {
+            if (numImagesUploaded < 2) setModalOpen(true);
+            else onClick();
+          }}
+        >
+          Predict
+        </Button>
+        <Modal
+          size="tiny"
+          open={modalOpen}
+          onClose={() => console.log("close")}
+        >
+          <Modal.Header>Upload more images</Modal.Header>
+          <Modal.Content>
+            <p>
+              Uploading more images can improve prediction. Would you like to do
+              so?
+            </p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              color="red"
+              onClick={() => {
+                setModalOpen(false);
+                onClick();
+              }}
+            >
+              <Icon name="remove" /> No
+            </Button>
+            <Button color="green" onClick={() => setModalOpen(false)}>
+              <Icon name="checkmark" /> Yes
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      </React.Fragment>
+    );
+  };
+
   return (
     <Segment placeholder>
       <List horizontal={isDesktopOrLaptop} verticalAlign="middle">
@@ -124,9 +170,10 @@ export const ImageCarousel = (props) => {
         )}
       </List>
       <Divider />
-      <Button fluid disabled={images.length === 0} onClick={onPredictPressed}>
-        Predict
-      </Button>
+      <PredictButton
+        numImagesUploaded={images.length}
+        onClick={onPredictPressed}
+      />
     </Segment>
   );
 };
