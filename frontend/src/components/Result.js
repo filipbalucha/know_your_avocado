@@ -1,6 +1,7 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
 import { Grid, Loader, Header, Popup, Segment } from "semantic-ui-react";
+import "chartjs-plugin-labels";
 
 const Graph = (props) => {
   const NUM_DP = 2;
@@ -12,12 +13,11 @@ const Graph = (props) => {
 
   const ripeness = result.category.replace("avocado_", ""); // TODO: temp
   const data = {
-    labels: summary.categories,
+    labels: summary.categories.map((cat) => cat.replace("avocado_", "")),
     datasets: [
       {
         backgroundColor: ["#d9a26f", "#b5ba6a"],
         borderWidth: 1,
-        label: "TBA",
         data: probabilities,
       },
     ],
@@ -31,34 +31,39 @@ const Graph = (props) => {
           }
           header={"What does this mean?"}
           trigger={
-            <Header as="h3">
-              This 🥑 is <b>{ripeness}</b> with a {probability}% probability!
-            </Header>
+            <Segment basic>
+              <Header as="h3">
+                This 🥑 is <i>{ripeness}</i>
+              </Header>
+              <p>with a {probability}% probability</p>
+            </Segment>
           }
         />
       </Grid.Row>
       <Grid.Row>
-        <Segment basic style={{ height: "50vh" }}>
-          <Pie data={data} options={{ maintainAspectRatio: false }} />
+        <Segment basic style={{ height: "30vh" }}>
+          <Pie
+            data={data}
+            options={{
+              maintainAspectRatio: false,
+              events: [], // disable everything on hover
+              legend: {
+                display: false,
+              },
+              plugins: {
+                labels: {
+                  render: "label",
+                  fontColor: "white",
+                  fontSize: 16,
+                },
+              },
+            }}
+          />
         </Segment>
       </Grid.Row>
     </Grid>
   );
 };
-
-// const VisibleMessage = (props) => {
-//   const { result } = props.response;
-//   const probability = (result.probability * 100).toFixed(2);
-//   const ripeness = result.category.replace("avocado_", ""); // TODO: temp
-//   return (
-//     <React.Fragment>
-//       <Header as="h3">
-//         This 🥑 is <i>{ripeness}</i>
-//       </Header>
-//       <p>with a {probability}% probability</p>
-//     </React.Fragment>
-//   );
-// };
 
 const NotVisibleMessage = () => (
   <React.Fragment>
