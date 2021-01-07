@@ -1,14 +1,20 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
-import { Grid, Loader, Header, Popup, Segment } from "semantic-ui-react";
+import {
+  Grid,
+  Loader,
+  Header,
+  Popup,
+  Segment,
+  Button,
+  Icon,
+  Divider,
+} from "semantic-ui-react";
 import "chartjs-plugin-labels";
 
 const Graph = (props) => {
-  const NUM_DP = 2;
   const { result, summary } = props.response;
-
-  const to_percentage = (val) => (val * 100).toFixed(NUM_DP);
-  const probabilities = summary.probabilities.map(to_percentage);
+  const to_percentage = (val) => (val * 100).toFixed(2);
   const probability = to_percentage(result.probability);
 
   const ripeness = result.category.replace("avocado_", ""); // TODO: temp
@@ -18,12 +24,12 @@ const Graph = (props) => {
       {
         backgroundColor: ["#d9a26f", "#b5ba6a"],
         borderWidth: 1,
-        data: probabilities,
+        data: summary.probabilities,
       },
     ],
   };
   return (
-    <Grid textAlign="center">
+    <Grid textAlign="center" columns="equal">
       <Grid.Row>
         <Popup
           content={
@@ -65,24 +71,38 @@ const Graph = (props) => {
   );
 };
 
-const NotVisibleMessage = () => (
-  <React.Fragment>
-    <Header as="h3">Sorry, I was unable to spot any 🥑</Header>
-    <p>Could you try retaking the photo?</p>
-  </React.Fragment>
+const NotVisibleMessage = (props) => {
+  return (
+    <React.Fragment>
+      <Header as="h3">Sorry, I was unable to spot any 🥑</Header>
+      <p>Could you try retaking the photo?</p>
+    </React.Fragment>
+  );
+};
+
+const ButtonBack = ({ onClick }) => (
+  <Button animated onClick={onClick}>
+    <Button.Content visible>Back</Button.Content>
+    <Button.Content hidden>
+      <Icon name="arrow left" />
+    </Button.Content>
+  </Button>
 );
 
 export const Result = (props) => {
-  const { loading } = props;
+  const { loading, onBackClicked } = props;
+  if (loading) return <Loader active content="Loading" />;
   let out;
-  if (loading) {
-    out = <Loader active content="Loading" />;
-  } else if (props.response.fruit_visible) {
+  if (props.response.fruit_visible) {
     out = <Graph {...props} />;
-    // out = <VisibleMessage {...props} />;
   } else {
     out = <NotVisibleMessage />;
   }
+  return (
+    <Segment placeholder>
+      {out}
 
-  return <Segment placeholder>{out}</Segment>;
+      <ButtonBack onClick={onBackClicked} />
+    </Segment>
+  );
 };

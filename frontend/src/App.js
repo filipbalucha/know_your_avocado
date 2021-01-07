@@ -90,7 +90,13 @@ function App() {
   const Body = () => {
     // const { status, response, handlePredictPressed } = props; // TODO: decide if necessary
     if (status !== "AWAIT")
-      return <Result loading={status === "LOADING"} response={response} />;
+      return (
+        <Result
+          loading={status === "LOADING"}
+          response={response}
+          onBackClicked={() => setStatus("AWAIT")}
+        />
+      );
     if (uploadedImages.length)
       return (
         <ImageCarousel
@@ -122,7 +128,7 @@ function App() {
         <Image centered src={avocado} size="small" />
         <Header as="h1">Know Your Avocado!</Header>
         <p>Say No to Unripe Avocados.</p>
-        <Steps status={status} />
+        <Steps status={status} handleUploadClicked={() => setStatus("AWAIT")} />
         <Body />
       </Segment>
       <ErrorMessage visible={error} />
