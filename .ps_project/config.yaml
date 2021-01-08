@@ -6,3 +6,4 @@ name: train
 no-logs: false
 projectId: pr8w5n77z
 tensorboard: false
+workspace: https://github.com/filipbalucha/know_your_avocado
