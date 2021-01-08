@@ -143,7 +143,7 @@ export const ImageCarousel = (props) => {
   };
 
   return (
-    <Segment placeholder>
+    <React.Fragment>
       <List horizontal={isDesktopOrLaptop} verticalAlign="middle">
         {imageUrls.map((imageUrl, index) => (
           <List.Item key={index}>
@@ -170,6 +170,6 @@ export const ImageCarousel = (props) => {
         numImagesUploaded={images.length}
         onClick={onPredictPressed}
       />
-    </Segment>
+    </React.Fragment>
   );
 };

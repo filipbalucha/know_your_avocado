@@ -8,7 +8,6 @@ import {
   Segment,
   Button,
   Icon,
-  Divider,
 } from "semantic-ui-react";
 import "chartjs-plugin-labels";
 
@@ -99,10 +98,9 @@ export const Result = (props) => {
     out = <NotVisibleMessage />;
   }
   return (
-    <Segment placeholder>
+    <React.Fragment>
       {out}
-
       <ButtonBack onClick={onBackClicked} />
-    </Segment>
+    </React.Fragment>
   );
 };

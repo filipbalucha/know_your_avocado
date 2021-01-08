@@ -69,5 +69,5 @@ export const WelcomeElement = (props) => {
       </Grid>
     );
   }
-  return <Segment placeholder>{element}</Segment>;
+  return element;
 };

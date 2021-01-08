@@ -89,16 +89,17 @@ function App() {
 
   const Body = () => {
     // const { status, response, handlePredictPressed } = props; // TODO: decide if necessary
-    if (status !== "AWAIT")
-      return (
+    let content;
+    if (status !== "AWAIT") {
+      content = (
         <Result
           loading={status === "LOADING"}
           response={response}
           onBackClicked={() => setStatus("AWAIT")}
         />
       );
-    if (uploadedImages.length)
-      return (
+    } else if (uploadedImages.length) {
+      content = (
         <ImageCarousel
           images={uploadedImages}
           onPredictPressed={handlePredictPressed}
@@ -107,9 +108,15 @@ function App() {
           allowCamera={!isBrowser}
         />
       );
-    return (
-      <WelcomeElement allowCamera={!isBrowser} onClick={handleImageUploaded} />
-    );
+    } else {
+      content = (
+        <WelcomeElement
+          allowCamera={!isBrowser}
+          onClick={handleImageUploaded}
+        />
+      );
+    }
+    return <Segment placeholder content={content} />;
   };
 
   return (
