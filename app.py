@@ -10,8 +10,9 @@ from flask_cors import CORS
 from functools import reduce
 
 CATEGORIES = ['avocado_ripe', 'avocado_unripe', 'other']
-TRAIN_MEAN = [0.5926, 0.5690, 0.4799]
-TRAIN_STD = [0.2370, 0.2411, 0.2543]
+
+TRAIN_MEAN = [0.5739, 0.5565, 0.4791]
+TRAIN_STD = [0.2403, 0.2433, 0.2545]
 IMAGE_SIZE = 125
 
 CAT_OTHER = 'other'
