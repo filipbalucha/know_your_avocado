@@ -28,6 +28,7 @@ torch.manual_seed(42)
 
 # set device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using {device}')
 
 
 # Source: Post by "kuzand" @https://discuss.pytorch.org/t/computing-the-mean-and-std-of-dataset/34949/2
@@ -48,20 +49,8 @@ imsize = 125
 data_dir = 'data'
 
 
-# # Compute mean and std of training data
-# img_loader = ImageFolder(os.path.join(data_dir, 'train'), transforms.Compose([
-#     transforms.Resize((imsize, imsize)),
-#     transforms.ToTensor()
-# ]))
-# data_loader = DataLoader(img_loader, batch_size=4, shuffle=False, num_workers=4)
-# train_mean, train_std = get_mean_std(data_loader)
-
-
-# train_mean, train_std
-
-
 # Random split into training and testing dataset
-full_dataset = ImageFolder('data2')
+full_dataset = ImageFolder(data_dir)
 train_size = int(0.8 * len(full_dataset))
 test_size = len(full_dataset) - train_size
 
@@ -84,7 +73,7 @@ class DatasetFromSubset(Dataset):
         return len(self.subset)
 
 
-# Determine mean and std of training dataset
+# Compute mean and std of training data
 train_copy = copy.copy(train_subset)  # Copy training dataset to prevent in-place modifications
 train_dataset = DatasetFromSubset(train_copy, transform=transforms.Compose([
     transforms.Resize((imsize, imsize)),
@@ -99,9 +88,6 @@ train_mean, train_std
 
 class_names = full_dataset.classes
 class_names
-
-
-# Source: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
 
 
 # Data augmentation and normalization for training
@@ -132,6 +118,9 @@ dataset_sizes = {
     'train': len(train_subset),
     'val': len(test_subset)
 }
+
+
+# Source: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
 
 
 # Show a couple images
