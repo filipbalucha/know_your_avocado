@@ -173,14 +173,14 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/react,flask,jupyternotebooks
 
-# Ignore Pixelmator files
-*.pxd/**/*
-fruitsfinal.ipynb
-
 frontend/.eslintcache
+temp.ipynb
+requirements_local.txt
 
+# Ignore images except for dataset
 *.jpg
 *.jpeg
 *.png
-temp.ipynb
-requirements_local.txt
+!notebook/data/**/*.jpg
+!notebook/data/**/*.jpeg
+!notebook/data/**/*.png
