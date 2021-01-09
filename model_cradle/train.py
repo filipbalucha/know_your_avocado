@@ -169,8 +169,8 @@ def main():
         'train_std': train_std.tolist(),
         'imsize': imsize
     }
-    # with open(json_path, 'w') as out:
-    #     json.dump(json_data, out)
+    with open(json_path, 'w') as out:
+        json.dump(json_data, out)
 
     # Source: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
     # Data augmentation and normalization for training
