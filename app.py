@@ -15,11 +15,11 @@ with open('details.json') as f:
     train_mean = details['train_mean']
     train_std = details['train_std']
     imsize = details['imsize']
-    class_names = details['class_names']
+    categories = details['class_names']
 
 CAT_OTHER = 'other'
-IDX_OTHER = class_names.index(CAT_OTHER)
-CATEGORIES_NO_OTHER = [cat for cat in class_names if cat is not CAT_OTHER]
+IDX_OTHER = categories.index(CAT_OTHER)
+CATEGORIES_NO_OTHER = [cat for cat in categories if cat != CAT_OTHER]
 
 # Source: https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html
 app = Flask(__name__, static_folder='frontend/build', static_url_path='')
@@ -28,12 +28,9 @@ cors = CORS(app)
 model = models.resnet18(pretrained=True)
 
 num_ftrs = model.fc.in_features
-model.fc = nn.Linear(num_ftrs, len(class_names))
+model.fc = nn.Linear(num_ftrs, len(categories))
 
-model.load_state_dict(
-    torch.load('model'), 
-    map_location=torch.device('cpu')  # force CPU-only deserialization
-)
+model.load_state_dict(torch.load('model', map_location=torch.device('cpu')))  # force CPU-only deserialization
 model.eval()
 
 
@@ -46,7 +43,7 @@ def transform_image(image_bytes):
             std=train_std
         )
     ])
-    img = Image.open(io.BytesIO(image_bytes))
+    img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
     return my_transforms(img).unsqueeze(0)
 
 
@@ -68,7 +65,7 @@ def generate_response(p):
     """    
     _, y_hat = p.max(1)
     predicted_idx = y_hat.item()
-    predicted_cat = class_names[predicted_idx]
+    predicted_cat = categories[predicted_idx]
 
     response = {}
     if predicted_cat == CAT_OTHER:
@@ -86,9 +83,9 @@ def generate_response(p):
             'category': predicted_cat,
             'probability': max(new_p)
         }
-        # Store summary of all class_names and associated probabilities
+        # Store summary of all categories and associated probabilities
         response['summary'] = {
-            'class_names': CATEGORIES_NO_OTHER,
+            'categories': CATEGORIES_NO_OTHER,
             'probabilities': new_p
         }
     return response
