@@ -167,7 +167,8 @@ def main():
     json_data = {
         'train_mean': train_mean.tolist(),
         'train_std': train_std.tolist(),
-        'imsize': imsize
+        'imsize': imsize,
+        'class_names': class_names
     }
     with open(json_path, 'w') as out:
         json.dump(json_data, out)
