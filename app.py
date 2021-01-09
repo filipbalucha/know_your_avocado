@@ -28,7 +28,7 @@ model = models.resnet18(pretrained=True)
 num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, len(CATEGORIES))
 
-model.load_state_dict(torch.load('notebook/model'))
+model.load_state_dict(torch.load('model_cradle/model'))
 model.eval()
 
 
