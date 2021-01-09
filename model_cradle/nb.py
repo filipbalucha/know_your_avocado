@@ -283,7 +283,7 @@ def predict(model, img_path):
     return p.item(), class_names[idx]
 
 
-torch.save(model_ft.state_dict(), '/storage/model')
+torch.save(model_ft.state_dict(), '/artifacts/model')
 
 
 # predict(model_ft, 'data/avocado_7.jpg')
