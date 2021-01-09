@@ -1,9 +1,0 @@
-command: bash pipeline.sh
-container: ufoym/deepo:all-py36 # All ML/DL frameworks in a single template with CUDA/cuDNN and other libraries. Python 36.
-isPreemptible: false
-machineType: P5000
-name: train
-no-logs: false
-projectId: pr8w5n77z
-tensorboard: false
-workspace: https://github.com/filipbalucha/know_your_avocado
