@@ -132,7 +132,7 @@ def main():
     print(f'Imsize: {imsize}')
     print(f'Num epochs: {num_epochs}')
     
-    json_path  = path.join(out_dir, 'json')
+    json_path  = path.join(out_dir, 'details.json')
     model_path = path.join(out_dir, 'model')
     
     # Fixed seed for reproducibility of results
@@ -160,16 +160,17 @@ def main():
     data_loader = DataLoader(train_dataset, batch_size=4, shuffle=False, num_workers=8)
     train_mean, train_std = get_mean_std(data_loader)
     print(f'Training dataset:')
-    print(f'\tmean: {train_mean}')
-    print(f'\tstd:  {train_std}')
+    print(f'\tmean: {train_mean.tolist()}')
+    print(f'\tstd:  {train_std.tolist()}')
 
     # Store data to JSON for API
     json_data = {
-        'train_mean': train_mean,
-        'train_std': train_std,
+        'train_mean': train_mean.tolist(),
+        'train_std': train_std.tolist(),
         'imsize': imsize
     }
-    json.dump(json_data, json_path)
+    with open(json_path, 'w') as out:
+        json.dump(json_data, out)
 
     # Source: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
     # Data augmentation and normalization for training
