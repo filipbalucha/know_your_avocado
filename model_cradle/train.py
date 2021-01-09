@@ -163,7 +163,8 @@ def main():
     # Data augmentation and normalization for training
     data_transforms = {
         'train': transforms.Compose([
-            transforms.RandomResizedCrop(int(0.8 * imsize)),
+            # transforms.RandomResizedCrop(int(0.8 * imsize)),
+            transforms.RandomResizedCrop(imsize),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             transforms.Normalize(mean=train_mean, std=train_std)
