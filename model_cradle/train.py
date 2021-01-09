@@ -119,10 +119,17 @@ def main():
     parser.add_argument("-o", "--out", dest="output",
                         help="location to which trained model will be exported"
                         )
-    output = parser.parse_args().output
+    parser.add_argument("-e", "--epochs", dest="num_epochs",
+                        help="number of epochs"
+                        )
     imsize = parser.parse_args().imsize
     imsize = int(imsize)
+    output = parser.parse_args().output
+    num_epochs = parser.parse_args().num_epochs
+    num_epochs = int(num_epochs)
+    
     print(f'Imsize: {imsize}')
+    print(f'Num epochs: {num_epochs}')
     
     # Fixed seed for reproducibility of results
     torch.manual_seed(42)
@@ -190,7 +197,16 @@ def main():
     exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
 
     # Train model
-    model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, dataloaders, dataset_sizes, device, num_epochs=2)
+    model_ft = train_model(
+        model_ft, 
+        criterion, 
+        optimizer_ft, 
+        exp_lr_scheduler, 
+        dataloaders, 
+        dataset_sizes, 
+        device=device, 
+        num_epochs=num_epochs
+    )
 
     # Save trained model
     torch.save(model_ft.state_dict(), output)
