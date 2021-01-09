@@ -1,4 +1,5 @@
 import io
+import json
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -9,15 +10,16 @@ from flask import Flask, request, send_from_directory
 from flask_cors import CORS
 from functools import reduce
 
-CATEGORIES = ['avocado_ripe', 'avocado_unripe', 'other']
-
-TRAIN_MEAN = [0.5739, 0.5565, 0.4791]
-TRAIN_STD = [0.2403, 0.2433, 0.2545]
-IMAGE_SIZE = 125
+with open('details.json') as f:
+    details = json.load(f)
+    train_mean = details['train_mean']
+    train_std = details['train_std']
+    imsize = details['imsize']
+    class_names = details['class_names']
 
 CAT_OTHER = 'other'
-IDX_OTHER = CATEGORIES.index(CAT_OTHER)
-CATEGORIES_NO_OTHER = [cat for cat in CATEGORIES if cat is not CAT_OTHER]
+IDX_OTHER = class_names.index(CAT_OTHER)
+CATEGORIES_NO_OTHER = [cat for cat in class_names if cat is not CAT_OTHER]
 
 # Source: https://pytorch.org/tutorials/intermediate/flask_rest_api_tutorial.html
 app = Flask(__name__, static_folder='frontend/build', static_url_path='')
@@ -26,7 +28,7 @@ cors = CORS(app)
 model = models.resnet18(pretrained=True)
 
 num_ftrs = model.fc.in_features
-model.fc = nn.Linear(num_ftrs, len(CATEGORIES))
+model.fc = nn.Linear(num_ftrs, len(class_names))
 
 model.load_state_dict(torch.load('model_cradle/model'))
 model.eval()
@@ -34,11 +36,11 @@ model.eval()
 
 def transform_image(image_bytes):
     my_transforms = transforms.Compose([
-        transforms.Resize(IMAGE_SIZE),
+        transforms.Resize(imsize),
         transforms.ToTensor(),
         transforms.Normalize(
-            mean=TRAIN_MEAN,
-            std=TRAIN_STD
+            mean=train_mean,
+            std=train_std
         )
     ])
     img = Image.open(io.BytesIO(image_bytes))
@@ -63,7 +65,7 @@ def generate_response(p):
     """    
     _, y_hat = p.max(1)
     predicted_idx = y_hat.item()
-    predicted_cat = CATEGORIES[predicted_idx]
+    predicted_cat = class_names[predicted_idx]
 
     response = {}
     if predicted_cat == CAT_OTHER:
@@ -81,9 +83,9 @@ def generate_response(p):
             'category': predicted_cat,
             'probability': max(new_p)
         }
-        # Store summary of all categories and associated probabilities
+        # Store summary of all class_names and associated probabilities
         response['summary'] = {
-            'categories': CATEGORIES_NO_OTHER,
+            'class_names': CATEGORIES_NO_OTHER,
             'probabilities': new_p
         }
     return response
