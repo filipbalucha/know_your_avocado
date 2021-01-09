@@ -181,6 +181,6 @@ requirements_local.txt
 *.jpg
 *.jpeg
 *.png
-!notebook/data/**/*.jpg
-!notebook/data/**/*.jpeg
-!notebook/data/**/*.png
+!model_cradle/data/**/*.jpg
+!model_cradle/data/**/*.jpeg
+!model_cradle/data/**/*.png
