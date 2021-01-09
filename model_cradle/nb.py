@@ -262,7 +262,7 @@ optimizer_ft = torch.optim.SGD(model_ft.parameters(), lr=0.001, momentum=0.9)
 exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
 
 
-model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=50)
+model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=2)
 
 
 visualize_model(model_ft)
@@ -283,7 +283,7 @@ def predict(model, img_path):
     return p.item(), class_names[idx]
 
 
-torch.save(model_ft.state_dict(), 'model')
+torch.save(model_ft.state_dict(), '/storage/model')
 
 
 # predict(model_ft, 'data/avocado_7.jpg')
