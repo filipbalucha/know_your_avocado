@@ -72,10 +72,7 @@ def train_model(model, criterion, optimizer, scheduler, dataloaders, dataset_siz
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
-                    if phase=='train': 
-                        outputs, _ = model(inputs) 
-                    else: 
-                        outputs=model(inputs)
+                    outputs = model(inputs)
                     _, preds = torch.max(outputs, 1)
                     loss = criterion(outputs, labels)
 
@@ -166,8 +163,7 @@ def main():
     # Data augmentation and normalization for training
     data_transforms = {
         'train': transforms.Compose([
-            # transforms.RandomResizedCrop(int(0.8 * imsize)),
-            transforms.RandomResizedCrop(imsize),
+            transforms.RandomResizedCrop(int(0.8 * imsize)),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             transforms.Normalize(mean=train_mean, std=train_std)
@@ -189,9 +185,8 @@ def main():
     dataset_sizes = { 'train': len(train_subset), 'val': len(test_subset) }
 
     # Load pre-trained model
-    # model_ft = models.resnet18(pretrained=True)
-    model_ft = models.inception_v3(pretrained=True)
-
+    model_ft = models.resnet34(pretrained=True)
+    
     num_ftrs = model_ft.fc.in_features
     model_ft.fc = nn.Linear(num_ftrs, len(class_names))
     model_ft = model_ft.to(device)
