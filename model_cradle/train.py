@@ -72,7 +72,10 @@ def train_model(model, criterion, optimizer, scheduler, dataloaders, dataset_siz
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
-                    outputs, aux = model(inputs)
+                    if phase=='train': 
+                        outputs, _ = model(inputs) 
+                    else: 
+                        outputs=model(inputs)
                     _, preds = torch.max(outputs, 1)
                     loss = criterion(outputs, labels)
 
