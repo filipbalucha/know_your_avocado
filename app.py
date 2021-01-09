@@ -30,7 +30,10 @@ model = models.resnet18(pretrained=True)
 num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, len(class_names))
 
-model.load_state_dict(torch.load('model'))
+model.load_state_dict(
+    torch.load('model'), 
+    map_location=torch.device('cpu')  # force CPU-only deserialization
+)
 model.eval()
 
 
