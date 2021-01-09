@@ -185,7 +185,9 @@ def main():
     dataset_sizes = { 'train': len(train_subset), 'val': len(test_subset) }
 
     # Load pre-trained model
-    model_ft = models.resnet18(pretrained=True)
+    # model_ft = models.resnet18(pretrained=True)
+    model_ft = models.inception_v3(pretrained=True)
+
     num_ftrs = model_ft.fc.in_features
     model_ft.fc = nn.Linear(num_ftrs, len(class_names))
     model_ft = model_ft.to(device)
