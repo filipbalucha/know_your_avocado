@@ -4,6 +4,7 @@
 import time
 import copy
 import torch
+import json
 import torch.nn as nn
 import torchvision.models as models
 import torchvision.transforms as transforms
@@ -11,6 +12,7 @@ from torchvision.datasets import ImageFolder
 from torch.utils.data.dataloader import DataLoader
 from torch.utils.data import random_split, Dataset
 from argparse import ArgumentParser
+from os import path
 
 class DatasetFromSubset(Dataset):
     def __init__(self, subset, transform=None):
@@ -72,9 +74,9 @@ def train_model(model, criterion, optimizer, scheduler, dataloaders, dataset_siz
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
-                    outputs = model(inputs)
-                    _, preds = torch.max(outputs, 1)
-                    loss = criterion(outputs, labels)
+                    out_dirs = model(inputs)
+                    _, preds = torch.max(out_dirs, 1)
+                    loss = criterion(out_dirs, labels)
 
                     # backward + optimize only if in training phase
                     if phase == 'train':
@@ -116,7 +118,7 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("--imsize", dest="imsize",
                         help="size of images used to train the CNN")
-    parser.add_argument("-o", "--out", dest="output",
+    parser.add_argument("-o", "--out", dest="out_dir",
                         help="location to which trained model will be exported"
                         )
     parser.add_argument("-e", "--epochs", dest="num_epochs",
@@ -124,12 +126,14 @@ def main():
                         )
     imsize = parser.parse_args().imsize
     imsize = int(imsize)
-    output = parser.parse_args().output
+    out_dir = parser.parse_args().out_dir
     num_epochs = parser.parse_args().num_epochs
     num_epochs = int(num_epochs)
-    
     print(f'Imsize: {imsize}')
     print(f'Num epochs: {num_epochs}')
+    
+    json_path  = path.join(out_dir, 'json')
+    model_path = path.join(out_dir, 'model')
     
     # Fixed seed for reproducibility of results
     torch.manual_seed(42)
@@ -158,6 +162,14 @@ def main():
     print(f'Training dataset:')
     print(f'\tmean: {train_mean}')
     print(f'\tstd:  {train_std}')
+
+    # Store data to JSON for API
+    json_data = {
+        'train_mean': train_mean,
+        'train_std': train_std,
+        'imsize': imsize
+    }
+    json.dump(json_data, json_path)
 
     # Source: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
     # Data augmentation and normalization for training
@@ -210,7 +222,7 @@ def main():
     )
 
     # Save trained model
-    torch.save(model_ft.state_dict(), output)
+    torch.save(model_ft.state_dict(), model_path)
 
 if __name__ == "__main__":
     main()
