@@ -102,18 +102,17 @@ export const ImageCarousel = (props) => {
     );
   };
 
-  const PredictButton = ({ numImagesUploaded, onClick }) => {
+  const PredictButton = (props) => {
     const [modalOpen, setModalOpen] = useState(false);
+    const onClick = () => {
+      if (props.numImagesUploaded < 2) setModalOpen(true);
+      else props.onClick();
+    };
     return (
       <React.Fragment>
-        <Button
-          fluid
-          onClick={() => {
-            if (numImagesUploaded < 2) setModalOpen(true);
-            else onClick();
-          }}
-        >
-          Predict
+        <Button fluid animated onClick={onClick}>
+          <Button.Content visible>Predict</Button.Content>
+          <Button.Content hidden content={<Icon name="arrow right" />} />
         </Button>
         <Modal size="tiny" open={modalOpen} onClose={() => setModalOpen(false)}>
           <Modal.Header>Upload more images</Modal.Header>
@@ -166,6 +165,7 @@ export const ImageCarousel = (props) => {
         )}
       </List>
       <Divider />
+      {/* <Button>Delete</Button> */}
       <PredictButton
         numImagesUploaded={images.length}
         onClick={onPredictPressed}
