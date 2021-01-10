@@ -80,7 +80,7 @@ function App() {
     );
   };
 
-  const handleImageRemoved = (index) => {
+  const handleRemovePressed = (index) => {
     if (index === -1) return;
     const images = Array.from(uploadedImages);
     images.splice(index, 1);
@@ -104,7 +104,7 @@ function App() {
           images={uploadedImages}
           onPredictPressed={handlePredictPressed}
           onAddPressed={handleImageUploaded}
-          onRemovePressed={handleImageRemoved}
+          handleRemovePressed={handleRemovePressed}
           allowCamera={!isBrowser}
         />
       );
