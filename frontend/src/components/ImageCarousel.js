@@ -104,13 +104,13 @@ export const ImageCarousel = (props) => {
 
   const PredictButton = (props) => {
     const [modalOpen, setModalOpen] = useState(false);
-    const onClick = () => {
+    const predict = () => {
       if (props.numImagesUploaded < 2) setModalOpen(true);
       else props.onClick();
     };
     return (
       <React.Fragment>
-        <Button fluid animated onClick={onClick}>
+        <Button fluid animated onClick={predict}>
           <Button.Content visible>Predict</Button.Content>
           <Button.Content hidden content={<Icon name="arrow right" />} />
         </Button>
@@ -127,7 +127,7 @@ export const ImageCarousel = (props) => {
               color="red"
               onClick={() => {
                 setModalOpen(false);
-                onClick();
+                props.onClick();
               }}
             >
               <Icon name="remove" /> No
@@ -150,7 +150,9 @@ export const ImageCarousel = (props) => {
             <List.Content>
               <Segment basic>
                 <Image centered rounded src={imageUrl} size="medium" />
-                <RemoveButton onClick={() => props.onRemovePressed(index)} />
+                <RemoveButton
+                  onClick={() => props.handleRemovePressed(index)}
+                />
               </Segment>
             </List.Content>
           </List.Item>
@@ -165,7 +167,6 @@ export const ImageCarousel = (props) => {
         )}
       </List>
       <Divider />
-      {/* <Button>Delete</Button> */}
       <PredictButton
         numImagesUploaded={images.length}
         onClick={onPredictPressed}
