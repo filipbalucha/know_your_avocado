@@ -9,6 +9,7 @@ import {
   Icon,
   Popup,
   Modal,
+  Header,
 } from "semantic-ui-react";
 import { useMediaQuery } from "react-responsive";
 
@@ -115,7 +116,7 @@ export const ImageCarousel = (props) => {
           <Button.Content hidden content={<Icon name="arrow right" />} />
         </Button>
         <Modal size="tiny" open={modalOpen} onClose={() => setModalOpen(false)}>
-          <Modal.Header>Upload more images</Modal.Header>
+          <Header icon="camera" content="Upload more images?" />
           <Modal.Content>
             <p>
               Uploading an extra image can improve prediction. Would you like to
