@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Header,
-  Image,
-  Segment,
-  Message,
-  Transition,
-  Container,
-} from "semantic-ui-react";
+import { Header, Image, Segment } from "semantic-ui-react";
 import avocado from "./avocado.PNG";
 import { Result } from "./components/Result";
 import { Footer } from "./components/Footer";
 import { WelcomeElement } from "./components/WelcomeElement";
 import { ImageCarousel } from "./components/ImageCarousel";
 import { Steps } from "./components/Steps";
+import { ErrorMessage } from "./components/ErrorMessage";
 import { isBrowser } from "react-device-detect";
 
 function App() {
@@ -49,35 +43,14 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setTimeout(() => {
-          setResponse(data);
-          setStatus("FINISHED");
-        }, 500); // TODO: simulate request timeout
+        setResponse(data);
+        setStatus("FINISHED");
       })
       .catch((err) => {
         console.error(err);
         setStatus("AWAIT");
         setError(true);
       });
-  };
-
-  const ErrorMessage = ({ visible }) => {
-    const style = {
-      position: "absolute",
-      width: "20vw",
-      bottom: 10,
-      right: 10,
-    };
-    return (
-      <Transition visible={error} animation="fade up" duration={500}>
-        <Container style={style}>
-          <Message negative>
-            <Message.Header>Server error</Message.Header>
-            <p>Please try again later</p>
-          </Message>
-        </Container>
-      </Transition>
-    );
   };
 
   const handleRemovePressed = (index) => {
