@@ -89,7 +89,7 @@ export const ImageCarousel = (props) => {
     return (
       <Button
         size="medium"
-        icon="cancel"
+        icon="trash alternate"
         color="red"
         circular
         style={{
