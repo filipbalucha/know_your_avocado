@@ -34,7 +34,7 @@ const DarkModeToggle = () => {
     <React.Fragment>
       <Icon name="moon" style={style} />
       <Checkbox toggle onChange={(_, { checked }) => setDarkMode(checked)} />
-      <Icon name="sun " style={style} />
+      <Icon name="sun" style={style} />
     </React.Fragment>
   );
 };
@@ -45,7 +45,7 @@ export const MenuBar = (props) => {
       <Container>
         <Menu.Item header>
           <Image size="mini" src={avocado} style={{ marginRight: "1.5em" }} />
-          KNYA
+          KNYA!
         </Menu.Item>
         <Menu.Item position="right">
           <DarkModeToggle />
