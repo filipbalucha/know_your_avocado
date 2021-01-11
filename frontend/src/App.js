@@ -6,6 +6,7 @@ import { Footer } from "./components/Footer";
 import { WelcomeElement } from "./components/WelcomeElement";
 import { ImageCarousel } from "./components/ImageCarousel";
 import { Steps } from "./components/Steps";
+import { MenuBar } from "./components/MenuBar";
 import { ErrorMessage } from "./components/ErrorMessage";
 import { isBrowser } from "react-device-detect";
 
@@ -105,12 +106,14 @@ function App() {
         padded={"very"}
         textAlign="center"
         style={{
+          paddingTop: "5em",
           display: "flex",
           minHeight: "100vh",
           flexDirection: "column",
           margin: 0,
         }}
       >
+        <MenuBar />
         <Image centered src={avocado} size="small" />
         <Header as="h1">Know Your Avocado!</Header>
         <p>Say No to Unripe Avocados.</p>
