@@ -12,6 +12,7 @@ const URL_GITHUB = "https://github.com/filipbalucha";
 const URL_FACEBOOK = "https://www.facebook.com/filiposlav";
 const EMAIL = "balucha.filip2@gmail.com";
 const model = "ResNet-18 CNN";
+const accuracy = "94%";
 var year = new Date().getFullYear();
 
 export const Footer = (props) => {
@@ -33,16 +34,20 @@ export const Footer = (props) => {
               <Header inverted as="h4" content="Author" />
               <p>Filip Balucha &copy;{year}</p>
             </Grid.Column>
-            <Grid.Column width={10}>
+
+            <Grid.Column width={7}>
               <Header as="h4" inverted>
                 Why?
               </Header>
               <p>
                 I struggle to tell ripe avocados from unripe ones, so I trained
-                a deep learning model based on the {model} to help me with the
-                task. Hope it can help you too 😊. Get in touch if you have any
-                requests or suggestions.
+                a deep learning model based on the {model} with a {accuracy}{" "}
+                accuracy to help with the task. Hope it can help you too 😊
               </p>
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <Header inverted as="h4" content="Cookies" />
+              <p>This website doesn't use 🍪</p>
             </Grid.Column>
             <Grid.Column width={3}>
               <Header as="h4" inverted>
@@ -62,6 +67,7 @@ export const Footer = (props) => {
                   <Icon name="mail" />
                 </List.Item>
               </List>
+              <p>Get in touch if you have any requests or suggestions 👍🏼</p>
             </Grid.Column>
           </Grid.Row>
         </Grid>
