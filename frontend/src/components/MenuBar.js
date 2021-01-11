@@ -8,6 +8,7 @@ import {
   Icon,
 } from "semantic-ui-react";
 import avocado from "../avocado.PNG";
+import "../css/Toggle.css";
 
 const LanguageDropdown = (props) => {
   const languageOptions = [
@@ -28,11 +29,12 @@ const LanguageDropdown = (props) => {
 
 const DarkModeToggle = () => {
   const [darkMode, setDarkMode] = useState(false); // TODO: fetch user preference
+  const style = { margin: 10 };
   return (
     <React.Fragment>
-      <Icon name="moon" />
+      <Icon name="moon" style={style} />
       <Checkbox toggle onChange={(_, { checked }) => setDarkMode(checked)} />
-      <Icon name="sun " />
+      <Icon name="sun " style={style} />
     </React.Fragment>
   );
 };
@@ -45,10 +47,10 @@ export const MenuBar = (props) => {
           <Image size="mini" src={avocado} style={{ marginRight: "1.5em" }} />
           KNYA
         </Menu.Item>
-        <LanguageDropdown />
         <Menu.Item>
           <DarkModeToggle />
         </Menu.Item>
+        <LanguageDropdown />
       </Container>
     </Menu>
   );
