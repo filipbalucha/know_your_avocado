@@ -41,16 +41,18 @@ const DarkModeToggle = () => {
 
 export const MenuBar = (props) => {
   return (
-    <Menu fixed="top">
+    <Menu borderless fixed="top">
       <Container>
         <Menu.Item header>
           <Image size="mini" src={avocado} style={{ marginRight: "1.5em" }} />
           KNYA
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item position="right">
           <DarkModeToggle />
         </Menu.Item>
-        <LanguageDropdown />
+        <Menu.Item>
+          <LanguageDropdown />
+        </Menu.Item>
       </Container>
     </Menu>
   );
