@@ -220,7 +220,7 @@ def main():
         num_epochs=num_epochs
     )
 
-    json_data['accuracy'] = accuracy
+    json_data['accuracy'] = accuracy.item()
     # Store data to JSON for API
     with open(json_path, 'w') as out:
         json.dump(json_data, out)
