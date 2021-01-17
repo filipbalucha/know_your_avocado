@@ -108,7 +108,7 @@ def train_model(model, criterion, optimizer, scheduler, dataloaders, dataset_siz
 
     # load best model weights
     model.load_state_dict(best_model_wts)
-    return model
+    return model, best_acc
 
 
 DATA_DIR = 'data'
@@ -163,15 +163,12 @@ def main():
     print(f'\tmean: {train_mean.tolist()}')
     print(f'\tstd:  {train_std.tolist()}')
 
-    # Store data to JSON for API
     json_data = {
         'train_mean': train_mean.tolist(),
         'train_std': train_std.tolist(),
         'imsize': imsize,
         'class_names': class_names
     }
-    with open(json_path, 'w') as out:
-        json.dump(json_data, out)
 
     # Source: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
     # Data augmentation and normalization for training
@@ -212,7 +209,7 @@ def main():
     exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
 
     # Train model
-    model_ft = train_model(
+    model_ft, accuracy = train_model(
         model_ft, 
         criterion, 
         optimizer_ft, 
@@ -222,6 +219,11 @@ def main():
         device=device, 
         num_epochs=num_epochs
     )
+
+    json_data['accuracy'] = accuracy
+    # Store data to JSON for API
+    with open(json_path, 'w') as out:
+        json.dump(json_data, out)
 
     # Save trained model
     torch.save(model_ft.state_dict(), model_path)
