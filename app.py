@@ -16,6 +16,7 @@ with open('details.json') as f:
     train_std = details['train_std']
     imsize = details['imsize']
     categories = details['class_names']
+    model_accuracy = details['accuracy']
 
 CAT_OTHER = 'other'
 IDX_OTHER = categories.index(CAT_OTHER)
@@ -101,6 +102,11 @@ def predict():
         # Process average of all predictions
         response = generate_response(ps_avg)
         return response, 200
+
+@app.route('/model_accuracy', methods=['GET'])
+def get_model_accuracy():
+    if request.method == 'GET':
+        return {'accuracy': model_accuracy}, 200
 
 @app.route('/')
 def serve():
