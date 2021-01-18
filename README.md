@@ -14,7 +14,7 @@ Every time the model is to be trained, a new _job_ is created.
 
 ### Create a new job
 
-`gradient jobs create --container ufoym/deepo:all-py36 --machineType P4000 --command "cd model_cradle && python train.py --imsize 250 --out /artifacts --epochs 150" --workspace https://github.com/filipbalucha/know_your_avocado.git --projectId <project_id>`
+`gradient jobs create --container ufoym/deepo:all-py36 --machineType P4000 --command "cd model_cradle && python train.py --imsize 300 --out /artifacts --epochs 150" --workspace https://github.com/filipbalucha/know_your_avocado.git --projectId <project_id>`
 
 After running the above command, the CLI will yield a job id.
 
