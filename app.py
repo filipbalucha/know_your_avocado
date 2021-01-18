@@ -108,6 +108,11 @@ def get_model_accuracy():
     if request.method == 'GET':
         return {'accuracy': model_accuracy}, 200
 
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
+
 @app.route('/')
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
