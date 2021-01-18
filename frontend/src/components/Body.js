@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Segment } from "semantic-ui-react";
 import { Result } from "./Result";
 import { WelcomeElement } from "./WelcomeElement";
 import { ImageCarousel } from "./ImageCarousel";
 import { isBrowser } from "react-device-detect";
+import ThemeContext from "../context/ThemeContext";
 
 export const Body = (props) => {
-  const { status, setStatus, setError } = props; // TODO: decide if necessary
+  const { darkMode } = useContext(ThemeContext);
+  const { status, setStatus, setError } = props;
   const [uploadedImages, setUploadedImages] = useState([]);
   const [response, setResponse] = useState();
 
@@ -76,8 +78,21 @@ export const Body = (props) => {
     );
   } else {
     content = (
-      <WelcomeElement allowCamera={!isBrowser} onClick={handleImageUploaded} />
+      <WelcomeElement
+        allowCamera={!isBrowser}
+        onClick={handleImageUploaded}
+        darkMode={darkMode}
+      />
     );
   }
-  return <Segment placeholder content={content} />;
+  return (
+    <Segment
+      placeholder
+      inverted={darkMode}
+      style={
+        darkMode ? { backgroundColor: "#303030", borderColor: "#454545" } : null
+      }
+      content={content}
+    />
+  );
 };

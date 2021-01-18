@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import {
   Button,
   List,
@@ -13,12 +13,17 @@ import {
 } from "semantic-ui-react";
 import { useMediaQuery } from "react-responsive";
 import { useTranslation } from "react-i18next";
+import ThemeContext from "../context/ThemeContext";
 
 const TakePicture = ({ onClick }) => {
   const cameraInputRef = useRef(null);
   return (
     <React.Fragment>
-      <Button icon="camera" onClick={() => cameraInputRef.current.click()} />
+      <Button
+        inverted
+        icon="camera"
+        onClick={() => cameraInputRef.current.click()}
+      />
       <input
         ref={cameraInputRef}
         type="file"
@@ -35,7 +40,11 @@ const UploadImage = ({ onClick, icon }) => {
   const imageInputRef = useRef(null);
   return (
     <React.Fragment>
-      <Button icon={icon} onClick={() => imageInputRef.current.click()} />
+      <Button
+        inverted
+        icon={icon}
+        onClick={() => imageInputRef.current.click()}
+      />
       <input
         ref={imageInputRef}
         type="file"
@@ -49,6 +58,7 @@ const UploadImage = ({ onClick, icon }) => {
 };
 
 const AddPhoto = ({ allowCamera, onClick }) => {
+  const { darkMode } = useContext(ThemeContext);
   if (!allowCamera) {
     return <UploadImage onClick={onClick} icon="plus" />;
   } else {
@@ -57,6 +67,7 @@ const AddPhoto = ({ allowCamera, onClick }) => {
         trigger={<Button icon="plus" />}
         flowing
         hoverable
+        inverted={darkMode}
         mouseEnterDelay={150}
         mouseLeaveDelay={150}
       >
@@ -90,6 +101,7 @@ export const ImageCarousel = (props) => {
   const RemoveButton = (props) => {
     return (
       <Button
+        inverted
         size="medium"
         icon="trash alternate"
         color="red"
@@ -105,15 +117,18 @@ export const ImageCarousel = (props) => {
   };
 
   const PredictButton = (props) => {
-    const [modalOpen, setModalOpen] = useState(false);
+    const { darkMode } = useContext(ThemeContext);
     const { t } = useTranslation();
+
+    const [modalOpen, setModalOpen] = useState(false);
+
     const predict = () => {
       if (props.numImagesUploaded < 2) setModalOpen(true);
       else props.onClick();
     };
     return (
       <React.Fragment>
-        <Button fluid animated onClick={predict}>
+        <Button inverted={darkMode} fluid animated onClick={predict}>
           <Button.Content visible content={t("predict")} />
           <Button.Content hidden content={<Icon name="arrow right" />} />
         </Button>

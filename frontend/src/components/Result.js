@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Pie } from "react-chartjs-2";
 import {
   Grid,
@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 import "chartjs-plugin-labels";
 import { useTranslation } from "react-i18next";
+import ThemeContext from "../context/ThemeContext";
 
 const Graph = (props) => {
   const { result, summary } = props.response;
@@ -84,9 +85,10 @@ const NotVisibleMessage = (props) => {
 };
 
 const ButtonBack = ({ onClick }) => {
+  const { darkMode } = useContext(ThemeContext);
   const { t } = useTranslation();
   return (
-    <Button animated onClick={onClick}>
+    <Button animated inverted={darkMode} onClick={onClick}>
       <Button.Content visible content={t("back")} />
       <Button.Content hidden>
         <Icon name="arrow left" />

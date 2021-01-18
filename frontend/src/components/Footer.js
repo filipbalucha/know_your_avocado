@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Segment,
   Container,
@@ -8,6 +8,7 @@ import {
   List,
 } from "semantic-ui-react";
 import { useTranslation } from "react-i18next";
+import ThemeContext from "../context/ThemeContext";
 
 const URL_LINKEDIN = "https://www.linkedin.com/in/filip-balucha/";
 const URL_GITHUB = "https://github.com/filipbalucha";
@@ -18,6 +19,8 @@ var year = new Date().getFullYear();
 
 export const Footer = (props) => {
   const { t } = useTranslation();
+  const { darkMode } = useContext(ThemeContext);
+
   const [accuracy, setAccuracy] = useState(null);
   const to_percent = (val) => Math.round(val * 100) + "%";
   fetch("/model_accuracy", {
@@ -30,17 +33,17 @@ export const Footer = (props) => {
     .catch((err) => {
       console.error(err);
     });
+  const style = {
+    padding: "1.5em 0em",
+    width: "100%",
+    bottom: 0,
+    flex: 1,
+  };
+  if (darkMode) {
+    style.borderTop = "1px solid #C5844B";
+  }
   return (
-    <Segment
-      inverted
-      vertical
-      style={{
-        padding: "1.5em 0em",
-        width: "100%",
-        bottom: 0,
-        flex: 1,
-      }}
-    >
+    <Segment inverted vertical style={style}>
       <Container>
         <Grid divided inverted stackable>
           <Grid.Row>
