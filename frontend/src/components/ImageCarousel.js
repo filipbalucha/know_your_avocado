@@ -12,6 +12,7 @@ import {
   Header,
 } from "semantic-ui-react";
 import { useMediaQuery } from "react-responsive";
+import { useTranslation } from "react-i18next";
 
 const TakePicture = ({ onClick }) => {
   const cameraInputRef = useRef(null);
@@ -105,6 +106,7 @@ export const ImageCarousel = (props) => {
 
   const PredictButton = (props) => {
     const [modalOpen, setModalOpen] = useState(false);
+    const { t } = useTranslation();
     const predict = () => {
       if (props.numImagesUploaded < 2) setModalOpen(true);
       else props.onClick();
@@ -112,16 +114,13 @@ export const ImageCarousel = (props) => {
     return (
       <React.Fragment>
         <Button fluid animated onClick={predict}>
-          <Button.Content visible>Predict</Button.Content>
+          <Button.Content visible content={t("predict")} />
           <Button.Content hidden content={<Icon name="arrow right" />} />
         </Button>
         <Modal size="tiny" open={modalOpen} onClose={() => setModalOpen(false)}>
-          <Header icon="camera" content="Upload more images?" />
+          <Header icon="camera" content={t("upload_extra")} />
           <Modal.Content>
-            <p>
-              Uploading an extra image can improve prediction. Would you like to
-              do so?
-            </p>
+            <p>{t("upload_extra_detail")}</p>
           </Modal.Content>
           <Modal.Actions>
             <Button
@@ -131,10 +130,10 @@ export const ImageCarousel = (props) => {
                 props.onClick();
               }}
             >
-              <Icon name="remove" /> No
+              <Icon name="remove" /> {t("no")}
             </Button>
             <Button color="green" onClick={() => setModalOpen(false)}>
-              <Icon name="checkmark" /> Yes
+              <Icon name="checkmark" /> {t("yes")}
             </Button>
           </Modal.Actions>
         </Modal>

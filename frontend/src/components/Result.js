@@ -10,15 +10,18 @@ import {
   Icon,
 } from "semantic-ui-react";
 import "chartjs-plugin-labels";
+import { useTranslation } from "react-i18next";
 
 const Graph = (props) => {
   const { result, summary } = props.response;
+  const { t } = useTranslation();
+
   const to_percentage = (val) => (val * 100).toFixed(2);
   const probability = to_percentage(result.probability);
 
-  const ripeness = result.category.replace("avocado_", ""); // TODO: temp
+  const ripeness = t(result.category);
   const data = {
-    labels: summary.categories.map((cat) => cat.replace("avocado_", "")),
+    labels: summary.categories.map((cat) => t(cat)),
     datasets: [
       {
         backgroundColor: ["#d9a26f", "#b5ba6a"],
@@ -37,10 +40,10 @@ const Graph = (props) => {
           header={"What does this mean?"}
           trigger={
             <Segment basic>
-              <Header as="h3">
-                This 🥑 is <i>{ripeness}</i>
+              <Header as="h3" content={t()}>
+                {t("this_avocado")} <i>{ripeness}</i>
               </Header>
-              <p>with a {probability}% probability</p>
+              <p>{t("with_probability", { probability })}</p>
             </Segment>
           }
         />
@@ -71,26 +74,33 @@ const Graph = (props) => {
 };
 
 const NotVisibleMessage = (props) => {
+  const { t } = useTranslation();
   return (
     <React.Fragment>
-      <Header as="h3">Sorry, I was unable to spot any 🥑</Header>
-      <p>Could you try retaking the photo?</p>
+      <Header as="h3" content={t("cannot_spot")} />
+      <p>{t("retake_photo")}</p>
     </React.Fragment>
   );
 };
 
-const ButtonBack = ({ onClick }) => (
-  <Button animated onClick={onClick}>
-    <Button.Content visible>Back</Button.Content>
-    <Button.Content hidden>
-      <Icon name="arrow left" />
-    </Button.Content>
-  </Button>
-);
+const ButtonBack = ({ onClick }) => {
+  const { t } = useTranslation();
+  return (
+    <Button animated onClick={onClick}>
+      <Button.Content visible content={t("back")} />
+      <Button.Content hidden>
+        <Icon name="arrow left" />
+      </Button.Content>
+    </Button>
+  );
+};
 
 export const Result = (props) => {
   const { loading, onBackClicked } = props;
-  if (loading) return <Loader active content="Loading" />;
+  const { t } = useTranslation();
+
+  if (loading) return <Loader active content={t("loading")} />;
+
   let out;
   if (props.response.fruit_visible) {
     out = <Graph {...props} />;

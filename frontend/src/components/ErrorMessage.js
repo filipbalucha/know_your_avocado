@@ -1,8 +1,11 @@
 import { Message, Transition, Container } from "semantic-ui-react";
 import { useMediaQuery } from "react-responsive";
+import { useTranslation } from "react-i18next";
+
 export const ErrorMessage = (props) => {
-  const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const { visible } = props;
+  const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
+  const { t } = useTranslation();
   const styleDesktop = {
     position: "absolute",
     width: "20vw",
@@ -26,8 +29,8 @@ export const ErrorMessage = (props) => {
     <Transition visible={visible} animation={animation} duration={500}>
       <Container style={style}>
         <Message negative>
-          <Message.Header>Server error</Message.Header>
-          <p>Please try again later</p>
+          <Message.Header>{t("server_error")}</Message.Header>
+          <p>{t("retry_later")}</p>
         </Message>
       </Container>
     </Transition>

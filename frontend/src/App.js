@@ -47,7 +47,6 @@ const App = () => {
         <Body status={status} setStatus={setStatus} setError={setError} />
       </Segment>
       <ErrorMessage visible={error} />
-
       <Footer />
     </React.Fragment>
   );
