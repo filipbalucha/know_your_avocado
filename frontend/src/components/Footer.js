@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Segment,
   Container,
@@ -13,11 +14,22 @@ const URL_GITHUB = "https://github.com/filipbalucha";
 const URL_FACEBOOK = "https://www.facebook.com/filiposlav";
 const EMAIL = "balucha.filip2@gmail.com";
 const model = "ResNet-18 CNN";
-const accuracy = "94%";
 var year = new Date().getFullYear();
 
 export const Footer = (props) => {
   const { t } = useTranslation();
+  const [accuracy, setAccuracy] = useState(null);
+  const to_percent = (val) => Math.round(val * 100) + "%";
+  fetch("/model_accuracy", {
+    method: "GET",
+  })
+    .then((res) => res.json())
+    .then(({ accuracy }) => {
+      setAccuracy(to_percent(accuracy));
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   return (
     <Segment
       inverted
