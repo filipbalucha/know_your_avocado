@@ -51,6 +51,9 @@ i18n
           cannot_spot: "Sorry, I was unable to spot any 🥑",
           retake_photo: "Could you try retaking the photo?",
           back: "Back",
+          what_means: "What does this mean?",
+          what_means_explanation:
+            "The percentage indicates to what extent the 'AI' is certain about its prediction. It does not quantify the ripeness of the 🥑 as such.",
         },
       },
       sk: {
@@ -88,6 +91,9 @@ i18n
           cannot_spot: "Nevidím žiadne 🥑",
           retake_photo: "Odfotil(a) by si ho ešte raz, prosím?",
           back: "Spať",
+          what_means: "Čo to znamená?",
+          what_means_explanation:
+            "Percento znázorňuje do akej miery si je 'umelá inteligencia' istá svojou predikciou. Nejde teda o mieru zrelosti 🥑",
         },
       },
     },

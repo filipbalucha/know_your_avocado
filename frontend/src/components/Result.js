@@ -35,10 +35,8 @@ const Graph = (props) => {
     <Grid textAlign="center" columns="equal">
       <Grid.Row>
         <Popup
-          content={
-            "The percentage indicates to what extent the 'AI' is certain about its prediction. It does not quantify the ripeness of the 🥑 as such."
-          }
-          header={"What does this mean?"}
+          header={t("what_means")}
+          content={t("what_means_explanation")}
           trigger={
             <Segment basic>
               <Header
