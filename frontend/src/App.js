@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Header, Image, Segment } from "semantic-ui-react";
 import avocado from "./avocado.PNG";
 import { Footer } from "./components/Footer";
-import { Steps } from "./components/Steps";
 import { MenuBar } from "./components/MenuBar";
 import { Body } from "./components/Body";
 import { ErrorMessage } from "./components/ErrorMessage";
@@ -60,7 +59,6 @@ const App = () => {
         <Image centered src={avocado} size="small" />
         <Header as="h1">Know Your Avocado!</Header>
         <p>{t("motto")}</p>
-        {/* <Steps status={status} handleUploadClicked={() => setStatus("AWAIT")} /> */}
         <Body status={status} setStatus={setStatus} setError={setError} />
       </Segment>
       <ErrorMessage visible={error} />
