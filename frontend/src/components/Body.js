@@ -21,9 +21,6 @@ export const Body = (props) => {
     // Append image to list of images
     setUploadedImages((prevImages) => {
       let files = [...prevImages, ...event.target.files];
-      const fileNames = files.map((file) => file.name);
-      // Drop duplicate files
-      files = files.filter((file, i) => fileNames.indexOf(file.name) === i);
       return files;
     });
   };
