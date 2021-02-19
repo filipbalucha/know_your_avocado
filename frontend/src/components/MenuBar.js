@@ -21,7 +21,6 @@ export const MenuBar = (props) => {
       <Container>
         <Menu.Item header>
           <Image size="mini" src={avocado} style={{ marginRight: "1.5em" }} />
-          KYA!
         </Menu.Item>
         <Menu.Item position="right">
           <DarkModeToggle />
