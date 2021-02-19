@@ -10,7 +10,7 @@ import i18n from "./i18next";
 import ThemeContext from "./context/ThemeContext";
 
 const App = () => {
-  const [status, setStatus] = useState("AWAIT");
+  const [status, setStatus] = useState("AWAIT"); // Possible values: AWAIT  | LOADING | FINISHED
   const [error, setError] = useState(false);
   const { t } = useTranslation();
   const [darkMode, setDarkMode] = useState();
