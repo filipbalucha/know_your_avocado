@@ -64,6 +64,7 @@ const AddPhoto = ({ allowCamera, onClick }) => {
   } else {
     return (
       <Popup
+        inverted={darkMode}
         trigger={<Button inverted={darkMode} icon="plus" />}
         flowing
         hoverable

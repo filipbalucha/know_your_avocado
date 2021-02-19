@@ -35,6 +35,7 @@ const Graph = (props) => {
     <Grid textAlign="center" columns="equal">
       <Grid.Row>
         <Popup
+          inverted={darkMode}
           header={t("what_means")}
           content={t("what_means_explanation")}
           trigger={
