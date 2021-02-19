@@ -16,7 +16,7 @@ export const ErrorMessage = (props) => {
   const styleMobile = {
     position: "fixed",
     width: "100%",
-    top: 15,
+    top: 70,
     left: 0,
     right: 0,
     opacity: 0.9,
