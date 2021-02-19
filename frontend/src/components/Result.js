@@ -27,6 +27,7 @@ const Graph = (props) => {
       {
         backgroundColor: ["#d9a26f", "#b5ba6a"],
         borderWidth: 1,
+        borderColor: darkMode ? "#1B1C1D" : "#D9DADC",
         data: summary.probabilities,
       },
     ],
@@ -69,7 +70,7 @@ const Graph = (props) => {
               plugins: {
                 labels: {
                   render: "label",
-                  fontColor: "white",
+                  fontColor: darkMode ? "#1B1C1D" : "#D9DADC",
                   fontSize: 16,
                 },
               },
