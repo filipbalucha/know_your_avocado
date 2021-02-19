@@ -14,13 +14,13 @@ import { useTranslation } from "react-i18next";
 import ThemeContext from "../context/ThemeContext";
 
 const Graph = (props) => {
+  const { darkMode } = useContext(ThemeContext);
   const { result, summary } = props.response;
   const { t } = useTranslation();
 
   const to_percentage = (val) => (val * 100).toFixed(2);
   const probability = to_percentage(result.probability);
 
-  const ripeness = t(result.category);
   const data = {
     labels: summary.categories.map((cat) => t(cat)),
     datasets: [
@@ -41,10 +41,18 @@ const Graph = (props) => {
           header={"What does this mean?"}
           trigger={
             <Segment basic>
-              <Header as="h3" content={t()}>
-                {t("this_avocado")} <i>{ripeness}</i>
-              </Header>
-              <p>{t("with_probability", { probability })}</p>
+              <Header
+                as="h3"
+                style={{ marginBottom: 0 }}
+                inverted={darkMode}
+                content={t("this_avocado") + " " + t(result.category)}
+              />
+              <Header
+                size="tiny"
+                style={{ marginTop: 0 }}
+                inverted={darkMode}
+                content={t("with_probability", { probability })}
+              />
             </Segment>
           }
         />
