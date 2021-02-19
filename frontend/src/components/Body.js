@@ -5,6 +5,7 @@ import { WelcomeElement } from "./WelcomeElement";
 import { ImageCarousel } from "./ImageCarousel";
 import { isBrowser } from "react-device-detect";
 import ThemeContext from "../context/ThemeContext";
+import imageCompression from "browser-image-compression";
 
 export const Body = (props) => {
   const { darkMode } = useContext(ThemeContext);
@@ -27,19 +28,32 @@ export const Body = (props) => {
 
   const handlePredictPressed = () => {
     const data = new FormData();
-    uploadedImages.forEach((image, i) => {
-      data.append("file[]", image);
-    });
+    const options = { maxWidthOrHeight: 300 };
     setStatus("LOADING");
-    fetch("/predict", {
-      method: "POST",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setResponse(data);
-        setStatus("FINISHED");
+    const compressions = uploadedImages.map((img) =>
+      imageCompression(img, options)
+    );
+    Promise.all(compressions)
+      .then((compressedImages) => {
+        compressedImages.forEach((img) => {
+          data.append("file[]", img);
+        });
+        fetch("/predict", {
+          method: "POST",
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setResponse(data);
+            setStatus("FINISHED");
+          })
+          .catch((err) => {
+            console.error(err);
+            setStatus("AWAIT");
+            setError(true);
+          });
       })
+      // TODO: custom error message
       .catch((err) => {
         console.error(err);
         setStatus("AWAIT");
