@@ -15,12 +15,13 @@ import { useMediaQuery } from "react-responsive";
 import { useTranslation } from "react-i18next";
 import ThemeContext from "../context/ThemeContext";
 
-const TakePicture = ({ onClick }) => {
+const TakePictureButton = ({ onClick }) => {
+  const { darkMode } = useContext(ThemeContext);
   const cameraInputRef = useRef(null);
   return (
     <React.Fragment>
       <Button
-        inverted
+        inverted={darkMode}
         icon="camera"
         onClick={() => cameraInputRef.current.click()}
       />
@@ -36,12 +37,13 @@ const TakePicture = ({ onClick }) => {
   );
 };
 
-const UploadImage = ({ onClick, icon }) => {
+const UploadImageButton = ({ onClick, icon }) => {
+  const { darkMode } = useContext(ThemeContext);
   const imageInputRef = useRef(null);
   return (
     <React.Fragment>
       <Button
-        inverted
+        inverted={darkMode}
         icon={icon}
         onClick={() => imageInputRef.current.click()}
       />
@@ -57,10 +59,10 @@ const UploadImage = ({ onClick, icon }) => {
   );
 };
 
-const AddPhoto = ({ allowCamera, onClick }) => {
+const AddPhotoButton = ({ allowCamera, onClick }) => {
   const { darkMode } = useContext(ThemeContext);
   if (!allowCamera) {
-    return <UploadImage onClick={onClick} icon="plus" />;
+    return <UploadImageButton onClick={onClick} icon="plus" />;
   } else {
     return (
       <Popup
@@ -73,10 +75,10 @@ const AddPhoto = ({ allowCamera, onClick }) => {
       >
         <Grid divided columns="equal">
           <Grid.Column>
-            <TakePicture onClick={onClick} />
+            <TakePictureButton onClick={onClick} />
           </Grid.Column>
           <Grid.Column>
-            <UploadImage onClick={onClick} icon="image" />
+            <UploadImageButton onClick={onClick} icon="image" />
           </Grid.Column>
         </Grid>
       </Popup>
@@ -176,7 +178,10 @@ export const ImageCarousel = (props) => {
           <List.Item>
             <Image />
             <List.Content>
-              <AddPhoto allowCamera={allowCamera} onClick={onAddPressed} />
+              <AddPhotoButton
+                allowCamera={allowCamera}
+                onClick={onAddPressed}
+              />
             </List.Content>
           </List.Item>
         )}
